@@ -20,6 +20,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
     "babel-loader": "^8.0.5",
+    "dotenv-webpack": "^1.7.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^4.1.0",
@@ -45,7 +46,13 @@
   },
   "precommit": "NODE_ENV=production ./node_modules/.bin/lint-staged",
   "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "dotenv": "^7.0.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "video.js": "^7.5.4",
+    "videojs-react": "github:padraigfl/videojs-react",
+    "videojs-youtube": "^2.6.0"
   }
 }
