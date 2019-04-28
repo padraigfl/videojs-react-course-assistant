@@ -1,28 +1,25 @@
+const fetchYoutubeApiCore = req =>
+  window
+    .fetch(
+      `https://www.googleapis.com/youtube/v3/${req}&key=${
+        process.env.YOUTUBE_API_KEY
+      }`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    .then(res => res.json());
+
 export const fetchPlaylist = id =>
-  window
-    .fetch(
-      `https://www.googleapis.com/youtube/v3/playlists?id=${id}&key=${
-        process.env.YOUTUBE_API_KEY
-      }&part=snippet,contentDetails`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-    .then(res => res.json());
+  fetchYoutubeApiCore(`playlists?id=${id}&part=snippet`);
+
 export const fetchPlaylistItems = id =>
-  window
-    .fetch(
-      `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${id}&part=snippet,contentDetails&key=${
-        process.env.YOUTUBE_API_KEY
-      }&maxResults=50`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-    .then(res => res.json());
+  fetchYoutubeApiCore(
+    `playlistItems?playlistId=${id}&part=snippet,contentDetails&maxResults=50`
+  );
+
+export const fetchVideoDetails = idList =>
+  fetchYoutubeApiCore(`videos?part=contentDetails&id=${idList}`);
