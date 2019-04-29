@@ -1,3 +1,4 @@
+import React from 'react';
 import { CourseProvider } from '.';
 
 const localStorageMock = () => {
@@ -18,12 +19,18 @@ const localStorageMock = () => {
   };
 };
 
+const mockVideo = {
+  src: jest.fn(),
+  play: jest.fn(),
+  on: jest.fn()
+};
+
 Object.defineProperty(window, 'localStorage', { value: localStorageMock() });
 
 describe('ProgramProvider', () => {
-  const component = new CourseProvider({
-    props: { startMenuData: [], desktopData: [] }
-  });
+  const component = new CourseProvider({ props: {} });
+  component.state.video = mockVideo;
+  component.state.playlist = [];
   component.setState = val => {
     if (typeof val !== 'function') {
       component.state = {
@@ -39,7 +46,7 @@ describe('ProgramProvider', () => {
   };
 
   it('setVideo', () => {
-    const x = () => ({ stuff: 'test' });
+    const x = { ...mockVideo };
     component.setVideo(x);
     expect(component.state.video).toEqual(x);
   });

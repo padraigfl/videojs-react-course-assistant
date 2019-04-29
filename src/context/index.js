@@ -94,7 +94,9 @@ export class CourseProvider extends Component {
   alterNotes = this.alterFields('notes');
 
   getSrc = idx => {
-    const entry = this.state.playlist.items[idx];
+    const entry =
+      Array.isArray(this.state.playlist.items) &&
+      this.state.playlist.items[idx];
     if (entry) {
       return `https://youtu.be/${entry.videoId}`;
     }
