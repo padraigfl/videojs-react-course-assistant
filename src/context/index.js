@@ -1,10 +1,12 @@
 import React, { Component, createContext } from 'react';
 
+import dummyPlaylist from '../constants/dummy';
+
 export const CourseContext = createContext();
 
 export class CourseProvider extends Component {
   static defaultProps = {
-    playlist: {},
+    playlist: dummyPlaylist, // @todo remove
     notes: []
   };
 
@@ -91,10 +93,33 @@ export class CourseProvider extends Component {
 
   alterNotes = this.alterFields('notes');
 
-  setTrack = (number, position = 0) =>
-    this.setState({ currentlyPlaying: { number, position } });
+  getSrc = idx => {
+    const entry = this.state.playlist.items[idx];
+    if (entry) {
+      return `https://youtu.be/${entry.videoId}`;
+    }
+  };
 
-  setVideo = vid => this.setState({ video: vid });
+  setTrack = (number, position = 0) => {
+    const source = this.getSrc(number);
+    this.state.video.src({
+      type: 'video/youtube',
+      src: source
+    });
+    // @todo update thumbnail
+    this.state.video.play();
+    this.setState({ currentlyPlaying: { number, position } });
+  };
+
+  // @todo timer before autoplay
+  nextTrack = () => this.setTrack(this.state.currentlyPlaying.number + 1);
+
+  setVideo = vid => {
+    // initialize
+    vid.on('ended', this.nextTrack);
+
+    this.setState({ video: vid });
+  };
 
   render() {
     return (

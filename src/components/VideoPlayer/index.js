@@ -30,6 +30,19 @@ export default class Video extends React.Component {
     alert(this.context.video.currentTime());
   };
 
+  currentDescription = () => {
+    debugger;
+    if (!this.context.currentlyPlaying) {
+      return null;
+    }
+    const currentTrack = this.context.playlist.items[
+      this.context.currentlyPlaying.number
+    ];
+    if (currentTrack) {
+      return currentTrack.description;
+    }
+  };
+
   setVideo = vid => {
     this.context.setVideo(vid);
   };
@@ -55,7 +68,7 @@ export default class Video extends React.Component {
         >
           currentTim
         </button>
-        <div>Description and action buttons here</div>
+        <div>{this.currentDescription()}</div>
       </VideoWrapper>
     );
   }

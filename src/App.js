@@ -8,7 +8,7 @@ import Notes from './components/Notes';
 
 const bodyStyle = css`
   background-color: #${colors.dark2};
-  color: #${colors.dark2};
+  color: #${colors.dark1};
   margin: ${spacings.xs}px;
   display: flex;
   height: calc(100vh - ${spacings.xs * 2}px);

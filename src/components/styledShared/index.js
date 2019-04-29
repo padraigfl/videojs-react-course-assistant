@@ -21,7 +21,7 @@ export const ListEntry = styled('div')`
     color: #${colors.brand};
     font-weight: bold;
     &:hover {
-      color: #${colors.accent};
+      color: #${colors.dark2};
     }
   }
 `;

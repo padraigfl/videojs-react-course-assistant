@@ -5,6 +5,7 @@ import dummyPlaylist from '../../constants/dummy';
 import { fetchPlaylistItems, fetchVideoDetails } from '../../api/youtube';
 
 import { ListWrapper, ListEntry } from '../styledShared';
+import CourseContext from '../../context';
 
 if (!process.env.YOUTUBE_API_KEY) {
   console.error('DOTENV-FAILURE');
@@ -75,26 +76,40 @@ const Thumbnail = styled('div')`
 `;
 
 const App = () => {
-  const [playlist, setPlaylist] = React.useState(dummyPlaylist);
+  const context = React.useContext(CourseContext);
+
   const [playlistId, updatePlaylistId] = React.useState(
     'PLZz6paDarXRlHVK272ZhQI78tQOhvljv8'
   );
-  const updatePlaylist = () => getPlaylist(setPlaylist, playlistId);
+
+  const updatePlaylist = () =>
+    getPlaylist(playlistId, context.getSavedPlaylist, context.setNewPlaylist);
   return (
     <ListWrapper>
-      <input onChange={updatePlaylistId} value={playlistId} />
+      <input
+        onChange={e => updatePlaylistId(e.target.value)}
+        value={playlistId}
+      />
       <button type="button" onClick={updatePlaylist}>
         Play
       </button>
-      {playlist &&
-        playlist.items.map(
-          ({ title, description, thumbnail, videoId, duration }) => (
+      {context.playlist &&
+        context.playlist.items.map(
+          ({ title, description, thumbnail, videoId, duration }, idx) => (
             <ListEntry>
               <Thumbnail
                 style={{ backgroundImage: `url('${thumbnail.url}')` }}
               />
               <div>
-                <a href={`https://youtu.be/${videoId}`}>{title}</a>
+                <a
+                  href={`https://youtu.be/${videoId}`}
+                  onClick={e => {
+                    e.preventDefault();
+                    context.setTrack(idx);
+                  }}
+                >
+                  {title}
+                </a>
                 {description && (
                   <div>
                     {description.slice(0, 20)} {duration}
