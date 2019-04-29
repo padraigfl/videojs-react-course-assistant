@@ -1,10 +1,8 @@
 import React from 'react';
-import { styled } from 'linaria/react';
 import CourseContext from '../../context';
 import Notetaker from './Notetaker';
 
-const Wrapper = styled('div')``;
-const Note = styled('div')``;
+import { ListWrapper, ListEntry } from '../styledShared';
 
 const Notes = () => {
   const context = React.useContext(CourseContext);
@@ -12,11 +10,13 @@ const Notes = () => {
   const [startTime, setStartTime] = React.useState(null);
 
   return (
-    <Wrapper>
+    <ListWrapper>
       {context.notes.map(note => (
-        <Note onClick={() => selectNote(note)}>{JSON.stringify(note)}</Note>
+        <ListEntry onClick={() => selectNote(note)}>
+          {JSON.stringify(note)}
+        </ListEntry>
       ))}
-      {startTime && (
+      {(startTime || startTime === 0) && (
         <Notetaker
           note={activeNote}
           noteFunctions={context.alterNotes}
@@ -26,7 +26,6 @@ const Notes = () => {
       <button
         type="button"
         onClick={() => {
-          debugger;
           setStartTime(context.video.currentTime());
         }}
       >
@@ -35,7 +34,7 @@ const Notes = () => {
       <button type="button" onClick={context.alterNotes.add}>
         Bookmark
       </button>
-    </Wrapper>
+    </ListWrapper>
   );
 };
 

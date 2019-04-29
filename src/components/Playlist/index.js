@@ -1,9 +1,10 @@
 import React from 'react';
 import { styled } from 'linaria/react';
-import { colors, spacings } from '../../constants/styles';
+import { spacings } from '../../constants/styles';
 import dummyPlaylist from '../../constants/dummy';
-
 import { fetchPlaylistItems, fetchVideoDetails } from '../../api/youtube';
+
+import { ListWrapper, ListEntry } from '../styledShared';
 
 if (!process.env.YOUTUBE_API_KEY) {
   console.error('DOTENV-FAILURE');
@@ -29,10 +30,9 @@ const formatPlaylistResponse = resp => ({
   }))
 });
 
-const getPlaylist = (updateState, playlistId) => {
+const getNewPlaylist = (playlistId, setPlaylist) =>
   fetchPlaylistItems(playlistId)
     .then(result => {
-      debugger;
       const formattedResult = formatPlaylistResponse(result);
       return fetchVideoDetails(
         formattedResult.items.map(i => i.videoId).join(',')
@@ -46,43 +46,24 @@ const getPlaylist = (updateState, playlistId) => {
             ...formattedResult,
             items: expandedItems
           };
-          debugger;
-          updateState(formattedPlaylistInfo);
+          setPlaylist(formattedPlaylistInfo);
         })
         .catch(error => {
-          console.log(error);
-          updateState(result);
+          console.error(error);
+          setPlaylist(result);
         });
     })
     .catch(error => {
       console.error(error);
     });
-};
 
-const PlaylistWrapper = styled('div')`
-  max-width: 350px;
-  width: 30%;
-  min-width: 250px;
-  height: 100%;
-  overflow-y: scroll;
-  background-color: #${colors.light};
-`;
-
-const PlaylistEntry = styled('div')`
-  display: flex;
-  max-height: 100px;
-  margin: ${spacings.xs}px;
-  margin-top: ${spacings.s}px;
-  overflow: hidden;
-  a {
-    display: block;
-    color: #${colors.brand};
-    font-weight: bold;
-    &:hover {
-      color: #${colors.accent};
-    }
+const getPlaylist = (playlistId, getSavedPlaylist, setPlaylist) => {
+  const playlist = getSavedPlaylist(playlistId);
+  if (playlist) {
+    return;
   }
-`;
+  getNewPlaylist(playlistId, setPlaylist);
+};
 
 const Thumbnail = styled('div')`
   height: 45px;
@@ -99,9 +80,8 @@ const App = () => {
     'PLZz6paDarXRlHVK272ZhQI78tQOhvljv8'
   );
   const updatePlaylist = () => getPlaylist(setPlaylist, playlistId);
-  console.log(playlist);
   return (
-    <PlaylistWrapper>
+    <ListWrapper>
       <input onChange={updatePlaylistId} value={playlistId} />
       <button type="button" onClick={updatePlaylist}>
         Play
@@ -109,7 +89,7 @@ const App = () => {
       {playlist &&
         playlist.items.map(
           ({ title, description, thumbnail, videoId, duration }) => (
-            <PlaylistEntry>
+            <ListEntry>
               <Thumbnail
                 style={{ backgroundImage: `url('${thumbnail.url}')` }}
               />
@@ -121,10 +101,10 @@ const App = () => {
                   </div>
                 )}
               </div>
-            </PlaylistEntry>
+            </ListEntry>
           )
         )}
-    </PlaylistWrapper>
+    </ListWrapper>
   );
 };
 

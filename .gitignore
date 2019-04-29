@@ -1,5 +1,7 @@
 .vscode
+.linaria-cache
 node_modules
+dist
 
 # Mac files
 .DS_Store

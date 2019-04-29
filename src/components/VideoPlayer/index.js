@@ -1,8 +1,14 @@
 import React from 'react';
 // import VideoComponent from 'videojs-react';
+import { styled } from 'linaria/react';
 import VideoComponent from './Video';
 
 import CourseContext from '../../context';
+
+const VideoWrapper = styled('div')`
+  flex-grow: 1;
+  height: 100%;
+`;
 
 export default class Video extends React.Component {
   static contextType = CourseContext;
@@ -25,7 +31,6 @@ export default class Video extends React.Component {
   };
 
   setVideo = vid => {
-    debugger;
     this.context.setVideo(vid);
   };
 
@@ -37,16 +42,21 @@ export default class Video extends React.Component {
   render() {
     console.log(this.videoRef.current);
     return (
-      <>
+      <VideoWrapper>
         <VideoComponent
           controls={this.controls}
           innerRef={this.videoRef}
           accessVideo={this.setVideo}
         />
-        <button style={{ position: 'absolute' }} onClick={this.currentTime}>
+        <button
+          type="button"
+          style={{ position: 'absolute' }}
+          onClick={this.currentTime}
+        >
           currentTim
         </button>
-      </>
+        <div>Description and action buttons here</div>
+      </VideoWrapper>
     );
   }
 }

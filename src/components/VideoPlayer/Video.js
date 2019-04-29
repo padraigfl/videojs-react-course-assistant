@@ -3,9 +3,9 @@ import React from 'react';
 class VideoPlayer extends React.Component {
   static defaultProps = {
     id: 'vid1',
-    className: 'video-js vjs-default-skin',
-    width: '640',
-    height: '360',
+    className: 'video-js vjs-default-skin vjs-16-9',
+    // width: '640',
+    // height: '360',
     setup: {
       techOrder: ['youtube'],
       sources: [
@@ -83,7 +83,7 @@ class VideoPlayer extends React.Component {
     return (
       <div data-vjs-player>
         <video
-          className="video-js"
+          className="video-js "
           controls
           preload="auto"
           {...rest}

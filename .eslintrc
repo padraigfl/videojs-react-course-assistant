@@ -1,6 +1,6 @@
 {
   "extends": ["airbnb", "prettier", "prettier/react"],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "jest"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
@@ -20,6 +20,9 @@
       }
     ]
   },
+  "env": {
+    "jest/globals": true
+  },
   "globals": {
     "window": true,
     "document": true,
@@ -27,7 +30,8 @@
     "FormData": true,
     "FileReader": true,
     "Blob": true,
-    "navigator": true
+    "navigator": true,
+    "videojs": true
   },
   "parser": "babel-eslint"
 }
