@@ -7,7 +7,7 @@ export const ListWrapper = styled('div')`
   min-width: 250px;
   height: 100%;
   overflow-y: scroll;
-  background-color: #${colors.light};
+  background-color: ${colors.light};
 `;
 
 export const ListEntry = styled('div')`
@@ -18,10 +18,22 @@ export const ListEntry = styled('div')`
   overflow: hidden;
   a {
     display: block;
-    color: #${colors.brand};
+    color: ${colors.brand};
     font-weight: bold;
     &:hover {
-      color: #${colors.dark2};
+      color: ${colors.dark2};
     }
+  }
+`;
+
+export const Heading = styled('div')`
+  padding: ${spacings.xs}px;
+  font-size: ${spacings.m}px;
+  font-weight: bold;
+  color: ${colors.light};
+  background-color: ${colors.brand};
+  &.invert {
+    color: ${colors.brand};
+    background-color: ${colors.light};
   }
 `;

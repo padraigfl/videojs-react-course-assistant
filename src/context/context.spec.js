@@ -1,4 +1,3 @@
-import React from 'react';
 import { CourseProvider } from '.';
 
 const localStorageMock = () => {
@@ -24,6 +23,12 @@ const mockVideo = {
   play: jest.fn(),
   on: jest.fn()
 };
+
+const noteGen = val => ({
+  text: val,
+  time: val,
+  video: val
+});
 
 Object.defineProperty(window, 'localStorage', { value: localStorageMock() });
 
@@ -79,25 +84,30 @@ describe('ProgramProvider', () => {
   });
 
   describe('alterNotes', () => {
+    const note0 = noteGen('0');
+    const note1 = noteGen('1');
+    const note2 = noteGen('2');
+
+    const editNote = { text: '2aa', time: '2', video: '2' };
     it('addNotes', () => {
-      const note = { note: '1', time: '1', video: '1' };
-      component.alterNotes.add(note);
-      expect(component.state.notes).toEqual([note]);
+      component.alterNotes.add(note2);
+      expect(component.state.notes).toEqual([note2]);
+      component.alterNotes.add(note0);
+      expect(component.state.notes).toEqual([note0, note2]);
+      component.alterNotes.add(note1);
+      expect(component.state.notes).toEqual([note0, note1, note2]);
     });
     it('editNotes', () => {
-      const note = { note: '2', time: '2', video: '2' };
-      component.alterNotes.edit(note, 0);
-      expect(component.state.notes).toEqual([note]);
+      component.alterNotes.edit(editNote, 0);
+      expect(component.state.notes).toEqual([editNote, note1, note2]);
 
       // does not add if beyond index
-      component.alterNotes.edit(note, 5);
-      expect(component.state.notes).toEqual([note]);
+      component.alterNotes.edit(editNote, 5);
+      expect(component.state.notes).toEqual([editNote, note1, note2]);
     });
     it('deleteNotes', () => {
-      const note = { note: '3', time: '3', video: '3' };
-      component.alterNotes.add(note);
-      component.alterNotes.delete(0);
-      expect(component.state.notes).toEqual([note]);
+      component.alterNotes.delete(1);
+      expect(component.state.notes).toEqual([editNote, note2]);
     });
   });
 });

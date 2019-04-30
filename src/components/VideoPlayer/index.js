@@ -4,6 +4,7 @@ import { styled } from 'linaria/react';
 import VideoComponent from './Video';
 
 import CourseContext from '../../context';
+import { Heading } from '../styledShared';
 
 const VideoWrapper = styled('div')`
   flex-grow: 1;
@@ -17,30 +18,21 @@ export default class Video extends React.Component {
 
   state = {};
 
-  controls = {
-    pause: x => {
-      debugger;
-    },
-    play: i => {
-      debugger;
-    }
-  };
-
   currentTime = () => {
-    alert(this.context.video.currentTime());
+    window.alert(this.context.video.currentTime());
   };
 
   currentDescription = () => {
-    debugger;
-    if (!this.context.currentlyPlaying) {
+    const currentTrackNumber =
+      this.context.currentlyPlaying && this.context.currentlyPlaying.number;
+    if (
+      !currentTrackNumber ||
+      this.context.playlist.items.length < currentTrackNumber + 1
+    ) {
       return null;
     }
-    const currentTrack = this.context.playlist.items[
-      this.context.currentlyPlaying.number
-    ];
-    if (currentTrack) {
-      return currentTrack.description;
-    }
+    const currentTrack = this.context.playlist.items[currentTrackNumber];
+    return currentTrack.description;
   };
 
   setVideo = vid => {
@@ -55,7 +47,8 @@ export default class Video extends React.Component {
   render() {
     console.log(this.videoRef.current);
     return (
-      <VideoWrapper>
+      <VideoWrapper className="Video Column">
+        <Heading className="invert">React-coursebuilder</Heading>
         <VideoComponent
           controls={this.controls}
           innerRef={this.videoRef}
@@ -66,7 +59,7 @@ export default class Video extends React.Component {
           style={{ position: 'absolute' }}
           onClick={this.currentTime}
         >
-          currentTim
+          currentTime
         </button>
         <div>{this.currentDescription()}</div>
       </VideoWrapper>

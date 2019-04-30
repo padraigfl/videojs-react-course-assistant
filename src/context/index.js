@@ -2,12 +2,40 @@ import React, { Component, createContext } from 'react';
 
 import dummyPlaylist from '../constants/dummy';
 
-export const CourseContext = createContext();
+export const Context = createContext();
+
+const insertAtIdx = (list, idx, entry) => [
+  ...list.slice(0, idx),
+  entry,
+  ...list.slice(idx, list.length)
+];
+
+const replaceAtIdx = (list, idx, entry) => [
+  ...list.slice(0, idx),
+  entry,
+  ...list.slice(idx + 1, list.length)
+];
 
 export class CourseProvider extends Component {
   static defaultProps = {
     playlist: dummyPlaylist, // @todo remove
-    notes: []
+    notes: [
+      { time: 10, video: 1, text: 'sfasdfas' },
+      { time: 100, video: 1, text: 'sfasdfas' },
+      { time: 1000, video: 2, text: 'sfasdfas' },
+      { time: 1000, video: 5, text: 'sfasdfas' },
+      { time: 1002, video: 8, text: 'sfasdfas' },
+      { time: 10, video: 1, text: 'sfasdfas' },
+      { time: 100, video: 1, text: 'sfasdfas' },
+      { time: 1000, video: 2, text: 'sfasdfas' },
+      { time: 1000, video: 5, text: 'sfasdfas' },
+      { time: 1002, video: 8, text: 'sfasdfas' },
+      { time: 10, video: 1, text: 'sfasdfas' },
+      { time: 100, video: 1, text: 'sfasdfas' },
+      { time: 1000, video: 2, text: 'sfasdfas' },
+      { time: 1000, video: 5, text: 'sfasdfas' },
+      { time: 1002, video: 8, text: 'sfasdfas' }
+    ]
   };
 
   state = {
@@ -15,7 +43,10 @@ export class CourseProvider extends Component {
     playlist: this.props.playlist,
     notes: this.props.notes,
     // bookmarks: [], bookmarks = notes with just a timestamp
-    currentlyPlaying: null,
+    currentlyPlaying: {
+      video: 0,
+      position: 0
+    },
     video: null
   };
 
@@ -57,25 +88,22 @@ export class CourseProvider extends Component {
   };
 
   alterFields = key => ({
-    add: ({ note, time, video }) => {
+    add: ({ text, time, video }) => {
+      const insertionIndex = this.state[key].findIndex(
+        note => note.video > video || (note.video === video && note.time < time)
+      );
       this.setState(
-        state => ({ [key]: [...state[key], { note, time, video }] }),
+        state => ({
+          [key]: insertAtIdx(state[key], insertionIndex, { text, time, video })
+        }),
         this.saveData
       );
     },
-    edit: ({ note, time, video }, idx) =>
+    edit: (note, idx) =>
       idx < this.state[key].length &&
       this.setState(
         state => ({
-          [key]: [
-            ...state[key].slice(0, idx),
-            {
-              note,
-              time: time || state[key][idx].time,
-              video
-            },
-            ...state[key].slice(idx + 1, state[key].length)
-          ]
+          [key]: replaceAtIdx(state[key], idx, note)
         }),
         this.saveData
       ),
@@ -100,6 +128,7 @@ export class CourseProvider extends Component {
     if (entry) {
       return `https://youtu.be/${entry.videoId}`;
     }
+    return '';
   };
 
   setTrack = (number, position = 0) => {
@@ -125,7 +154,7 @@ export class CourseProvider extends Component {
 
   render() {
     return (
-      <CourseContext.Provider
+      <Context.Provider
         value={{
           ...this.state,
           getSavedPlaylist: this.getSavedPlaylist,
@@ -136,9 +165,9 @@ export class CourseProvider extends Component {
         }}
       >
         {this.props.children}
-      </CourseContext.Provider>
+      </Context.Provider>
     );
   }
 }
 
-export default CourseContext;
+export default Context;

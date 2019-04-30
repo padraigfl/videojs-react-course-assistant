@@ -4,7 +4,7 @@ import { spacings } from '../../constants/styles';
 import dummyPlaylist from '../../constants/dummy';
 import { fetchPlaylistItems, fetchVideoDetails } from '../../api/youtube';
 
-import { ListWrapper, ListEntry } from '../styledShared';
+import { ListWrapper, ListEntry, Heading } from '../styledShared';
 import CourseContext from '../../context';
 
 if (!process.env.YOUTUBE_API_KEY) {
@@ -24,6 +24,7 @@ const formatPlaylistResponse = resp => ({
   items: resp.items.map(({ snippet }) => ({
     videoId: snippet.resourceId.videoId,
     thumbnail: snippet.thumbnails.default,
+    posterImage: snippet.thumbnails.high.url,
     channelId: snippet.channelId,
     channelTitle: snippet.channelTitle,
     title: snippet.title,
@@ -85,7 +86,8 @@ const App = () => {
   const updatePlaylist = () =>
     getPlaylist(playlistId, context.getSavedPlaylist, context.setNewPlaylist);
   return (
-    <ListWrapper>
+    <ListWrapper className="Playlist Column">
+      <Heading>Playlist</Heading>
       <input
         onChange={e => updatePlaylistId(e.target.value)}
         value={playlistId}
@@ -96,7 +98,7 @@ const App = () => {
       {context.playlist &&
         context.playlist.items.map(
           ({ title, description, thumbnail, videoId, duration }, idx) => (
-            <ListEntry>
+            <ListEntry key={videoId}>
               <Thumbnail
                 style={{ backgroundImage: `url('${thumbnail.url}')` }}
               />
