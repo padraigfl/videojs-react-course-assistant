@@ -20,21 +20,21 @@ export class CourseProvider extends Component {
   static defaultProps = {
     playlist: dummyPlaylist, // @todo remove
     notes: [
-      { time: 10, video: 1, text: 'sfasdfas' },
-      { time: 100, video: 1, text: 'sfasdfas' },
-      { time: 1000, video: 2, text: 'sfasdfas' },
-      { time: 1000, video: 5, text: 'sfasdfas' },
-      { time: 1002, video: 8, text: 'sfasdfas' },
-      { time: 10, video: 1, text: 'sfasdfas' },
-      { time: 100, video: 1, text: 'sfasdfas' },
-      { time: 1000, video: 2, text: 'sfasdfas' },
-      { time: 1000, video: 5, text: 'sfasdfas' },
-      { time: 1002, video: 8, text: 'sfasdfas' },
-      { time: 10, video: 1, text: 'sfasdfas' },
-      { time: 100, video: 1, text: 'sfasdfas' },
-      { time: 1000, video: 2, text: 'sfasdfas' },
-      { time: 1000, video: 5, text: 'sfasdfas' },
-      { time: 1002, video: 8, text: 'sfasdfas' }
+      // { time: 10, video: 0, text: 'sdfasdfas' },
+      // { time: 100, video: 1, text: 'sfasdftfas' },
+      // { time: 105, video: 2, text: 'sfasfgjtdfas' },
+      // { time: 120, video: 3, text: 'sfawqrgrsdfas' },
+      // { time: 102, video: 4, text: 'sfsewasdfas' },
+      // { time: 10, video: 5, text: 'sfasdfas' },
+      // { time: 100, video: 5, text: 'sfaservadrsfas' },
+      // { time: 14, video: 6, text: 'sfasafadfas' },
+      // { time: 23, video: 6, text: 'sfasfdfas' },
+      // { time: 12, video: 7, text: 'sfasederwfas' },
+      // { time: 10, video: 8, text: 'sfasdfewrdsfas' },
+      // { time: 40, video: 8, text: 'sfashtrdfas' },
+      // { time: 60, video: 8, text: 'sfaftsdfas' },
+      // { time: 29, video: 9, text: 'sfasfdersdfas' },
+      // { time: 130, video: 9, text: 'sfawersdfas' }
     ]
   };
 
@@ -89,9 +89,18 @@ export class CourseProvider extends Component {
 
   alterFields = key => ({
     add: ({ text, time, video }) => {
-      const insertionIndex = this.state[key].findIndex(
-        note => note.video > video || (note.video === video && note.time < time)
-      );
+      debugger;
+      const arrayLength =
+        Array.isArray(this.state[key]) && this.state[key].length;
+      // @todo tidyup
+      const insertionIndex =
+        arrayLength > 0
+          ? this.state[key].findIndex(
+              (note, idx) =>
+                (note.video === video && note.time > time) ||
+                (arrayLength > idx - 1 && this.state[key][idx].video > video)
+            ) || arrayLength
+          : 0;
       this.setState(
         state => ({
           [key]: insertAtIdx(state[key], insertionIndex, { text, time, video })
@@ -131,19 +140,19 @@ export class CourseProvider extends Component {
     return '';
   };
 
-  setTrack = (number, position = 0) => {
-    const source = this.getSrc(number);
+  setTrack = (video, position = 0) => {
+    const source = this.getSrc(video);
     this.state.video.src({
       type: 'video/youtube',
       src: source
     });
     // @todo update thumbnail
     this.state.video.play();
-    this.setState({ currentlyPlaying: { number, position } });
+    this.setState({ currentlyPlaying: { video, position } });
   };
 
   // @todo timer before autoplay
-  nextTrack = () => this.setTrack(this.state.currentlyPlaying.number + 1);
+  nextTrack = () => this.setTrack(this.state.currentlyPlaying.video + 1);
 
   setVideo = vid => {
     // initialize

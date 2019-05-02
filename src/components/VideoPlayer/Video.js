@@ -73,7 +73,14 @@ class VideoPlayer extends React.Component {
   // so videojs won't create additional wrapper in the DOM
   // see https://github.com/videojs/video.js/pull/3856
   render() {
-    const { setup, onReadyCheck, innerRef, accessVideo, ...rest } = this.props;
+    const {
+      setup,
+      onReadyCheck,
+      innerRef,
+      accessVideo,
+      className,
+      ...rest
+    } = this.props;
     if (this.state.noVideoJs === 'videojs') {
       return <div>Wheres Videojs?</div>;
     }
@@ -83,11 +90,11 @@ class VideoPlayer extends React.Component {
     return (
       <div data-vjs-player>
         <video
-          className="video-js "
           controls
           preload="auto"
           {...rest}
           ref={this.props.innerRef}
+          className={`video-js ${className}`}
         />
       </div>
     );

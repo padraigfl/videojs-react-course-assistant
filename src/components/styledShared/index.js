@@ -8,6 +8,12 @@ export const ListWrapper = styled('div')`
   height: 100%;
   overflow-y: scroll;
   background-color: ${colors.light};
+  display: flex;
+  flex-direction: column;
+`;
+
+export const List = styled('div')`
+  overflow: scroll;
 `;
 
 export const ListEntry = styled('div')`

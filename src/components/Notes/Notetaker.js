@@ -1,16 +1,19 @@
 import React from 'react';
 import { styled } from 'linaria/react';
 
+import CourseContext from '../../context';
 import { colors, spacings } from '../../constants/styles';
+import { formatTime } from '../../helpers';
 
 const NoteWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   padding: ${spacings.s}px;
+  background-color: ${colors.brand};
   margin-top: auto;
 `;
 const TextArea = styled('textarea')`
-  height: 150px;
+  height: 100px;
   background-color: ${colors.accent};
 `;
 const NoteActions = styled('div')`
@@ -18,34 +21,49 @@ const NoteActions = styled('div')`
 `;
 
 const Notetaker = props => {
-  const existingText = props.note && props.note.text;
-  const [text, updateNote] = React.useState(existingText || '');
-  const [time, updateTime] = React.useState(props.noteStart);
-  const [video, setVideo] = React.useState(props.video);
+  const context = React.useContext(CourseContext);
+  const propNote = props.note || {};
+  const [text, updateNote] = React.useState(propNote.text);
+  const [time, updateTime] = React.useState(propNote.time);
+  const [video, updateVideo] = React.useState(propNote.video);
+  debugger;
   return (
     <NoteWrapper>
-      <TextArea onChange={e => updateNote(e.target.value)} value={text} />
-      <NoteActions>
+      <TextArea
+        onFocus={() => {
+          if (!time) {
+            updateTime(context.video.currentTime());
+            updateVideo(context.currentlyPlaying.video);
+          }
+        }}
+        onChange={e => updateNote(e.target.value)}
+        value={text}
+      />
+
+      {typeof video === 'number' && typeof time !== 'undefined' ? (
         <div>
-          {video} | {time}
+          Video: {context.playlist.items[video - 1]} | Time: {formatTime(time)}
         </div>
+      ) : null}
+      <NoteActions>
         <button
           type="button"
           onClick={() => {
-            setVideo(props.video);
-            updateTime(props.currentTime());
+            updateVideo(context.currentlyPlaying.video);
+            updateTime(context.video.currentTime());
           }}
         >
-          Current Time
+          Set Current Time
         </button>
         <button
           type="button"
           onClick={() => {
-            props.noteFunctions.add({
-              time: props.time,
+            context.alterNotes.add({
+              time,
               text,
               video
             });
+            updateTime(null);
           }}
         >
           {props.note ? 'Update' : 'Save'}
