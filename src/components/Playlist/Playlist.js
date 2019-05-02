@@ -21,37 +21,38 @@ if (!process.env.YOUTUBE_API_KEY) {
 
 const formatPlaylistResponse = resp => ({
   total: resp.pageInfo.totalResults,
-  items: resp.items.map(({ snippet }) => ({
-    videoId: snippet.resourceId.videoId,
-    thumbnail: snippet.thumbnails.default,
-    posterImage: snippet.thumbnails.high.url,
-    channelId: snippet.channelId,
-    channelTitle: snippet.channelTitle,
-    title: snippet.title,
-    description: snippet.description
-  }))
+  items: resp.items.reduce(
+    (acc, { snippet }) => ({
+      ...acc,
+      [snippet.resourceId.videoId]: {
+        videoId: snippet.resourceId.videoId,
+        thumbnail: snippet.thumbnails.default,
+        posterImage: snippet.thumbnails.high.url,
+        channelId: snippet.channelId,
+        channelTitle: snippet.channelTitle,
+        title: snippet.title,
+        description: snippet.description
+      }
+    }),
+    {}
+  ),
+  order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
 });
 
 const getNewPlaylist = (playlistId, setPlaylist) =>
   fetchPlaylistItems(playlistId)
     .then(result => {
       const formattedResult = formatPlaylistResponse(result);
-      return fetchVideoDetails(
-        formattedResult.items.map(i => i.videoId).join(',')
-      )
+      return fetchVideoDetails(formattedResult.order.join(','))
         .then(vidDetails => {
-          const expandedItems = formattedResult.items.map((item, idx) => ({
-            ...item,
-            ...vidDetails.items[idx].contentDetails,
-            duration: ytTimeToSeconds(
-              vidDetails.items[idx].contentDetails.duration
-            )
-          }));
-          const formattedPlaylistInfo = {
-            ...formattedResult,
-            items: expandedItems
-          };
-          setPlaylist(formattedPlaylistInfo);
+          vidDetails.items.forEach(item => {
+            formattedResult.items[item.id] = {
+              ...formattedResult.items[item.id],
+              ...item.contentDetails,
+              duration: ytTimeToSeconds(item.contentDetails.duration)
+            };
+          });
+          setPlaylist(formattedResult);
         })
         .catch(error => {
           console.error(error);
@@ -96,12 +97,19 @@ const App = () => {
         value={playlistId}
       />
       <button type="button" onClick={updatePlaylist}>
-        Play
+        Fetch playlist
       </button>
       <List>
         {context.playlist &&
-          context.playlist.items.map(
-            ({ title, description, thumbnail, videoId, duration }, idx) => (
+          context.playlist.order.map((vidKey, idx) => {
+            const {
+              title,
+              description,
+              thumbnail,
+              videoId,
+              duration
+            } = context.playlist.items[vidKey];
+            return (
               <ListEntry key={videoId}>
                 <Thumbnail
                   style={{ backgroundImage: `url('${thumbnail.url}')` }}
@@ -123,8 +131,8 @@ const App = () => {
                   )}
                 </div>
               </ListEntry>
-            )
-          )}
+            );
+          })}
       </List>
     </ListWrapper>
   );

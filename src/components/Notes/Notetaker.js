@@ -22,18 +22,35 @@ const NoteActions = styled('div')`
 
 const Notetaker = props => {
   const context = React.useContext(CourseContext);
+  const textEl = React.useRef();
   const propNote = props.note || {};
   const [text, updateNote] = React.useState(propNote.text);
-  const [time, updateTime] = React.useState(propNote.time);
-  const [video, updateVideo] = React.useState(propNote.video);
-  debugger;
+  const [time, updateTime] = React.useState(propNote.time || 0);
+  const [video, updateVideo] = React.useState(propNote.video || 0);
+
   return (
     <NoteWrapper>
       <TextArea
         onFocus={() => {
-          if (!time) {
+          if (!text) {
             updateTime(context.video.currentTime());
             updateVideo(context.currentlyPlaying.video);
+          }
+        }}
+        ref={textEl}
+        onKeyPress={e => {
+          if (!e.shiftKey && e.which === 13) {
+            e.preventDefault();
+            context.alterNotes.add(
+              {
+                time,
+                text
+              },
+              context.playlist.order[video]
+            );
+            updateTime(null);
+            updateNote('');
+            textEl.current.blur();
           }
         }}
         onChange={e => updateNote(e.target.value)}
@@ -42,7 +59,11 @@ const Notetaker = props => {
 
       {typeof video === 'number' && typeof time !== 'undefined' ? (
         <div>
-          Video: {context.playlist.items[video - 1]} | Time: {formatTime(time)}
+          Video:{' '}
+          {Array.isArray(context.playlist.items) &&
+            context.playlist.items[video].title}
+          <br />
+          Time: {formatTime(time)}
         </div>
       ) : null}
       <NoteActions>
@@ -57,16 +78,17 @@ const Notetaker = props => {
         </button>
         <button
           type="button"
-          onClick={() => {
-            context.alterNotes.add({
-              time,
-              text,
-              video
-            });
-            updateTime(null);
-          }}
+          onClick={() =>
+            context.alterNotes.add(
+              {
+                time: context.video.currentTime()
+              },
+              context.playlist.order[context.currentlyPlaying.video]
+            )
+          }
+          disabled={!context.video}
         >
-          {props.note ? 'Update' : 'Save'}
+          Bookmark
         </button>
       </NoteActions>
     </NoteWrapper>

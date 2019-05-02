@@ -22,28 +22,31 @@ const Notes = () => {
     <ListWrapper className={cx('Notes Column', main)}>
       <Heading>Notes &amp; Bookmarks</Heading>
       <List>
-        {context.notes.map(note => (
-          <ListEntry
-            key={`${note.text}${note.time}`}
-            onClick={() => selectNote(note)}
-          >
-            <div>
-              <a
-                href={`https://youtu.be/${
-                  context.playlist.items[note.video].videoId
-                }?t=${Math.floor(note.time)}`}
-                onClick={e => {
-                  e.preventDefault();
-                  context.setTrack(note.video);
-                }}
-              >
-                {context.playlist.items[note.video].title} |{' '}
-                {formatTime(note.time)}
-              </a>
-              {note.text && <div>{note.text}</div>}
-            </div>
-          </ListEntry>
-        ))}
+        {context.playlist.order.map(vidId =>
+          (context.notes[vidId] || []).map(note => (
+            <ListEntry
+              key={`${note.text}${note.time}`}
+              onClick={() => selectNote(note)}
+            >
+              <div>
+                <a
+                  href={`https://youtu.be/${vidId}?t=${Math.floor(note.time)}`}
+                  onClick={e => {
+                    e.preventDefault();
+                    context.setTrack(
+                      context.playlist.order.findIndex(x => x === vidId),
+                      note.time
+                    );
+                  }}
+                >
+                  {context.playlist.items[vidId].title} |{' '}
+                  {formatTime(note.time)}
+                </a>
+                {note.text && <div>{note.text}</div>}
+              </div>
+            </ListEntry>
+          ))
+        )}
       </List>
       <div style={{ marginTop: 'auto' }}>
         <Notetaker
@@ -53,18 +56,6 @@ const Notes = () => {
           // }
           // currentTrack={context.currentlyPlaying}
         />
-        <button
-          type="button"
-          onClick={() =>
-            context.alterNotes.add({
-              time: context.video.currentTime(),
-              video: context.currentlyPlaying.video
-            })
-          }
-          disabled={!context.video || !context.video.currentTime()}
-        >
-          Bookmark
-        </button>
       </div>
     </ListWrapper>
   );

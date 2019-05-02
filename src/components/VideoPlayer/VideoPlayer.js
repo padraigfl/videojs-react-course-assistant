@@ -33,14 +33,13 @@ export default class Video extends React.Component {
   currentDescription = () => {
     const currentTrackNumber =
       this.context.currentlyPlaying && this.context.currentlyPlaying.video;
-    if (
-      !currentTrackNumber ||
-      this.context.playlist.items.length < currentTrackNumber + 1
-    ) {
+    if (!currentTrackNumber || currentTrackNumber < 0) {
       return null;
     }
-    const currentTrack = this.context.playlist.items[currentTrackNumber];
-    return currentTrack.description;
+    const currentId = this.context.playlist.order[currentTrackNumber];
+    const currentTrack = this.context.playlist.items[currentId];
+    if (currentTrack) return currentTrack.description;
+    return null;
   };
 
   setVideo = vid => {
