@@ -21,13 +21,13 @@ const localStorageMock = () => {
 const mockVideo = {
   src: jest.fn(),
   play: jest.fn(),
-  on: jest.fn()
+  on: jest.fn(),
+  currentTime: jest.fn()
 };
 
 const noteGen = val => ({
   text: val,
-  time: val,
-  video: val
+  time: val
 });
 
 Object.defineProperty(window, 'localStorage', { value: localStorageMock() });
@@ -57,12 +57,16 @@ describe('ProgramProvider', () => {
   });
 
   it('setTrack', () => {
+    component.state.playlist = {
+      order: [0, 1]
+    };
     component.setTrack(0);
     expect(component.state.currentlyPlaying).toEqual({
       video: 0,
       position: 0
     });
     component.setTrack(1, 123);
+    expect(component.state.video.currentTime).toHaveBeenCalled();
     expect(component.state.currentlyPlaying).toEqual({
       video: 1,
       position: 123
@@ -89,22 +93,36 @@ describe('ProgramProvider', () => {
     expect(insertAtIdx(list, 5, 7)).toEqual([1, 2, 4, 5, 6, 7]);
     expect(insertAtIdx([], 0, 7)).toEqual([7]);
   });
+
   describe('alterNotes', () => {
     const note0 = noteGen(0);
     const note1 = noteGen(1);
     const note2 = noteGen(2);
     const note3 = noteGen(3);
 
-    const editNote = { text: '2aa', time: '2', video: '2' };
+    const editNote = { text: '2aa', time: '2' };
     it('addNotes', () => {
-      component.alterNotes.add(note0);
-      expect(component.state.notes).toEqual([note0]);
-      component.alterNotes.add(note1);
-      expect(component.state.notes).toEqual([note0, note1]);
-      component.alterNotes.add(note3);
-      // expect(component.state.notes).toEqual([note0, note1, note3]);
-      component.alterNotes.add(note2);
-      expect(component.state.notes).toEqual([note0, note1, note2, note3]);
+      component.alterNotes.add(note0, 0);
+      expect(component.state.notes).toEqual({ 0: [note0] });
+      component.alterNotes.add(note3, 0);
+      expect(component.state.notes).toEqual({ 0: [note0, note3] });
+      component.alterNotes.add(note2, 1);
+      expect(component.state.notes).toEqual({
+        0: [note0, note3],
+        1: [note2]
+      });
+      component.alterNotes.add(note1, 0);
+      expect(component.state.notes).toEqual({
+        0: [note0, note1, note3],
+        1: [note2]
+      });
+    });
+    xit('deleteNotes', () => {
+      component.alterNotes.delete(1, 0);
+      expect(component.state.notes).toEqual({
+        0: [note0, note1, note3],
+        1: []
+      });
     });
     xit('editNotes', () => {
       component.alterNotes.edit(editNote, 0);
@@ -113,10 +131,6 @@ describe('ProgramProvider', () => {
       // does not add if beyond index
       component.alterNotes.edit(editNote, 5);
       expect(component.state.notes).toEqual([editNote, note1, note2]);
-    });
-    xit('deleteNotes', () => {
-      component.alterNotes.delete(1);
-      expect(component.state.notes).toEqual([note0, note2, note3]);
     });
   });
 });

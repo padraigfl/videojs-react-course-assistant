@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react';
 
-import dummyPlaylist from '../constants/dummy';
+import { filmish as dummyPlaylist } from '../constants/dummy';
 
 export const Context = createContext();
 
@@ -91,10 +91,10 @@ export class CourseProvider extends Component {
       }
       const insertionIndex = list.findIndex(
         (entry, idx) =>
-          entry.time > time ||
+          entry.time >= time ||
           (arrayLength > idx + 1 && list[idx + 1].time >= time)
       );
-
+      console.log(insertionIndex);
       this.setState(
         state => ({
           [key]: {
@@ -144,7 +144,7 @@ export class CourseProvider extends Component {
     const vidId =
       Array.isArray(this.state.playlist.order) &&
       this.state.playlist.order[idx];
-    if (vidId) {
+    if (vidId || vidId === 0) {
       return `https://youtu.be/${vidId}`;
     }
     return '';
@@ -152,6 +152,10 @@ export class CourseProvider extends Component {
 
   setTrack = (video, position = 0) => {
     const source = this.getSrc(video);
+    if (!source) {
+      console.error('no track found');
+      return;
+    }
     this.state.video.src({
       type: 'video/youtube',
       src: source
