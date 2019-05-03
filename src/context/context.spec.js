@@ -35,7 +35,7 @@ Object.defineProperty(window, 'localStorage', { value: localStorageMock() });
 describe('ProgramProvider', () => {
   const component = new CourseProvider({ props: {} });
   component.state.video = mockVideo;
-  component.state.playlist = [];
+  component.state.playlist = { id: 'abc' };
   component.setState = val => {
     if (typeof val !== 'function') {
       component.state = {
@@ -102,26 +102,26 @@ describe('ProgramProvider', () => {
 
     const editNote = { text: '2aa', time: '2' };
     it('addNotes', () => {
-      component.alterNotes.add(note0, 0);
-      expect(component.state.notes).toEqual({ 0: [note0] });
-      component.alterNotes.add(note3, 0);
-      expect(component.state.notes).toEqual({ 0: [note0, note3] });
-      component.alterNotes.add(note2, 1);
+      component.alterNotes.add(note0, 'a');
+      expect(component.state.notes).toEqual({ a: [note0] });
+      component.alterNotes.add(note3, 'a');
+      expect(component.state.notes).toEqual({ a: [note0, note3] });
+      component.alterNotes.add(note2, 'b');
       expect(component.state.notes).toEqual({
-        0: [note0, note3],
-        1: [note2]
+        a: [note0, note3],
+        b: [note2]
       });
-      component.alterNotes.add(note1, 0);
+      component.alterNotes.add(note1, 'a');
       expect(component.state.notes).toEqual({
-        0: [note0, note1, note3],
-        1: [note2]
+        a: [note0, note1, note3],
+        b: [note2]
       });
     });
-    xit('deleteNotes', () => {
-      component.alterNotes.delete(1, 0);
+    it('deleteNotes', () => {
+      component.alterNotes.delete('a', 1);
       expect(component.state.notes).toEqual({
-        0: [note0, note1, note3],
-        1: []
+        a: [note0, note3],
+        b: [note2]
       });
     });
     xit('editNotes', () => {

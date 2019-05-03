@@ -19,7 +19,7 @@ if (!process.env.YOUTUBE_API_KEY) {
 //   }))
 // });
 
-const formatPlaylistResponse = resp => ({
+const formatPlaylistResponse = (resp, id) => ({
   total: resp.pageInfo.totalResults,
   items: resp.items.reduce(
     (acc, { snippet }) => ({
@@ -36,13 +36,14 @@ const formatPlaylistResponse = resp => ({
     }),
     {}
   ),
+  id,
   order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
 });
 
 const getNewPlaylist = (playlistId, setPlaylist) =>
   fetchPlaylistItems(playlistId)
     .then(result => {
-      const formattedResult = formatPlaylistResponse(result);
+      const formattedResult = formatPlaylistResponse(result, playlistId);
       return fetchVideoDetails(formattedResult.order.join(','))
         .then(vidDetails => {
           vidDetails.items.forEach(item => {
@@ -124,11 +125,7 @@ const App = () => {
                   >
                     {title}
                   </a>
-                  {description && (
-                    <div>
-                      {description.slice(0, 20)} {formatTime(duration)}
-                    </div>
-                  )}
+                  {formatTime(duration)}
                 </div>
               </ListEntry>
             );

@@ -62,8 +62,7 @@ const Notetaker = props => {
           Video:{' '}
           {Array.isArray(context.playlist.items) &&
             context.playlist.items[video].title}
-          <br />
-          Time: {formatTime(time)}
+          | Time: {formatTime(time)}
         </div>
       ) : null}
       <NoteActions>

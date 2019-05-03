@@ -21,6 +21,8 @@ const Description = styled('div')`
   overflow: scroll;
   background-color: ${colors.light};
   padding: ${spacings.s}px;
+  margin-top: ${spacings.xs}px;
+  flex-grow: 1;
 `;
 
 export default class Video extends React.Component {
@@ -53,9 +55,14 @@ export default class Video extends React.Component {
   // see https://github.com/videojs/video.js/pull/3856
   render() {
     console.log(this.videoRef.current);
+    const currentId = this.context.getCurrentlyPlayingId();
     return (
       <VideoWrapper className="Video Column">
-        <Heading className="invert">React-coursebuilder</Heading>
+        <Heading className="invert">
+          {currentId
+            ? this.context.playlist.items[currentId].title
+            : 'Coursebuilder'}
+        </Heading>
         <VideoComponent innerRef={this.videoRef} accessVideo={this.setVideo} />
         <Description>{this.currentDescription()}</Description>
       </VideoWrapper>

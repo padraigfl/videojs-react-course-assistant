@@ -23,7 +23,7 @@ const Notes = () => {
       <Heading>Notes &amp; Bookmarks</Heading>
       <List>
         {context.playlist.order.map(vidId =>
-          (context.notes[vidId] || []).map(note => (
+          (context.notes[vidId] || []).map((note, idx) => (
             <ListEntry
               key={`${note.text}${note.time}`}
               onClick={() => selectNote(note)}
@@ -43,6 +43,12 @@ const Notes = () => {
                   {formatTime(note.time)}
                 </a>
                 {note.text && <div>{note.text}</div>}
+                <button
+                  type="button"
+                  onClick={() => context.alterNotes.delete(vidId, idx)}
+                >
+                  Delete
+                </button>
               </div>
             </ListEntry>
           ))

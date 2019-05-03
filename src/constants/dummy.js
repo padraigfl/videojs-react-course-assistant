@@ -1,5 +1,6 @@
 export const initialPlaylist = {
   total: 20,
+  id: 'testPlaylist',
   items: {
     OE2qEpkWWoQ: {
       videoId: 'OE2qEpkWWoQ',

@@ -20,6 +20,7 @@ WIP https://react-coursebuilder.netlify.com/ (env variables not yet set)
 - [ ] Control panel to control speed and view
 - [ ] Download notes in a friendly format (csv? Json? what's good?)
 - [ ] custom playlists (multiple sources? JSON plugin?)
+- [ ] update poster on load new video
 
 ## Further afield
 
