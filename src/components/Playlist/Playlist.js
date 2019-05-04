@@ -66,8 +66,10 @@ const getNewPlaylist = (playlistId, setPlaylist, youtubeKey) =>
     });
 
 const getPlaylist = (playlistId, getSavedPlaylist, setPlaylist, youtubeKey) => {
-  const playlist = getSavedPlaylist(playlistId);
-  if (playlist || youtubeKey) {
+  const playlist = getSavedPlaylist(
+    playlistId.replace(/.*list=/, '').replace(/&.*/, '')
+  );
+  if (playlist) {
     console.error('no playlist to be found');
     return;
   }
@@ -90,7 +92,7 @@ const App = () => {
     context.playlist.id || ''
   );
   const [youtubeKey, updateAPIKey] = React.useState(
-    process.env.YOUTUBE_API_KEY
+    process.env.YOUTUBE_API_KEY || ''
   );
 
   const updatePlaylist = () =>
