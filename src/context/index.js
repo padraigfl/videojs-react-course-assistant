@@ -27,7 +27,7 @@ export class CourseProvider extends Component {
 
     // @todo, tidyup local storage search
     const { playlist, notes, currentlyPlaying } =
-      this.props.playlist && this.getSavedPlaylist(this.props.playlist.id);
+      this.getSavedPlaylist(this.props.playlist.id) || {};
 
     this.state = {
       availableData: [], // list of playlists in localStorage

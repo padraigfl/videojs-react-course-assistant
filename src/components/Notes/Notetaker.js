@@ -60,8 +60,8 @@ const Notetaker = props => {
       {typeof video === 'number' && typeof time !== 'undefined' ? (
         <div>
           Video:{' '}
-          {Array.isArray(context.playlist.items) &&
-            context.playlist.items[video].title}
+          {context.playlist.items &&
+            context.playlist.items[context.getCurrentlyPlayingId()].title}{' '}
           | Time: {formatTime(time)}
         </div>
       ) : null}
