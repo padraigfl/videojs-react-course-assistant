@@ -25,20 +25,21 @@ export class CourseProvider extends Component {
   constructor(props) {
     super(props);
 
+    // @todo, tidyup local storage search
+    const { playlist, notes, currentlyPlaying } =
+      this.props.playlist && this.getSavedPlaylist(this.props.playlist.id);
+
     this.state = {
       availableData: [], // list of playlists in localStorage
-      playlist: this.props.playlist,
-      notes: this.props.notes,
+      playlist: playlist || this.props.playlist,
+      notes: notes || this.props.notes,
       // bookmarks: [], bookmarks = notes with just a timestamp
-      currentlyPlaying: {
+      currentlyPlaying: currentlyPlaying || {
         video: 0, // index in array
         position: 0
       },
       video: null
     };
-    if (this.props.playlist) {
-      this.getSavedPlaylist(this.props.playlist.id);
-    }
   }
 
   componentDidMount() {
@@ -55,7 +56,9 @@ export class CourseProvider extends Component {
     }
     const formatted = JSON.parse(playlist);
     // @todo: validate
-    this.setState(formatted);
+    if (this.state) {
+      this.setState(formatted);
+    }
     return formatted;
   };
 

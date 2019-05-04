@@ -38,6 +38,7 @@ export const Heading = styled('div')`
   font-weight: bold;
   color: ${colors.light};
   background-color: ${colors.brand};
+  display: flex;
   &.invert {
     color: ${colors.brand};
     background-color: ${colors.light};

@@ -5,22 +5,66 @@ import CourseContext from '../../context';
 import Notetaker from './Notetaker';
 import { colors, spacings } from '../../constants/styles';
 
-import { ListWrapper, List, ListEntry, Heading } from '../styledShared';
+import { ListWrapper, List, ListEntry } from '../styledShared';
 import { formatTime } from '../../helpers';
+import Heading from '../Heading/Heading';
 
 const main = css`
   display: flex;
   flex-direction: column;
 `;
 
+const downloadNotes = (notes, playlist) => {
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  document.body.appendChild(a);
+
+  // Set the HREF to a Blob representation of the data to be downloaded
+  a.href = window.URL.createObjectURL(
+    new Blob(
+      [
+        JSON.stringify({
+          playlist: playlist.id,
+          notes: playlist.order.map(v => ({
+            track: playlist.items[v].title,
+            notes: notes[v]
+          }))
+        })
+      ],
+      { type: 'text/json' }
+    )
+  );
+
+  // Use download attribute to set set desired file name
+  a.setAttribute('download', `Notes_${playlist.id}`);
+
+  // Trigger the download by simulating click
+  a.click();
+
+  // Cleanup
+  window.URL.revokeObjectURL(a.href);
+  document.body.removeChild(a);
+};
+
 const Notes = () => {
   const context = React.useContext(CourseContext);
   const [activeNote, selectNote] = React.useState();
-  const [startTime, setStartTime] = React.useState(null);
+
+  const dlNotes = () => downloadNotes(context.notes, context.playlist);
 
   return (
     <ListWrapper className={cx('Notes Column', main)}>
-      <Heading>Notes &amp; Bookmarks</Heading>
+      <Heading
+        settingsView={
+          <div>
+            <button type="button" onClick={dlNotes}>
+              Download Notes
+            </button>
+          </div>
+        }
+      >
+        Notes &amp; Bookmarks
+      </Heading>
       <List>
         {context.playlist.order.map(vidId =>
           (context.notes[vidId] || []).map((note, idx) => (

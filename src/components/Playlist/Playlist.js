@@ -4,8 +4,9 @@ import { spacings } from '../../constants/styles';
 import { formatTime, ytTimeToSeconds } from '../../helpers';
 import { fetchPlaylistItems, fetchVideoDetails } from '../../api/youtube';
 
-import { ListWrapper, ListEntry, Heading, List } from '../styledShared';
+import { ListWrapper, ListEntry, List } from '../styledShared';
 import CourseContext from '../../context';
+import Heading from '../Heading/Heading';
 
 if (!process.env.YOUTUBE_API_KEY) {
   console.error('DOTENV-FAILURE');
@@ -40,11 +41,11 @@ const formatPlaylistResponse = (resp, id) => ({
   order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
 });
 
-const getNewPlaylist = (playlistId, setPlaylist) =>
-  fetchPlaylistItems(playlistId)
+const getNewPlaylist = (playlistId, setPlaylist, youtubeKey) =>
+  fetchPlaylistItems(playlistId, youtubeKey)
     .then(result => {
       const formattedResult = formatPlaylistResponse(result, playlistId);
-      return fetchVideoDetails(formattedResult.order.join(','))
+      return fetchVideoDetails(formattedResult.order.join(','), youtubeKey)
         .then(vidDetails => {
           vidDetails.items.forEach(item => {
             formattedResult.items[item.id] = {
@@ -64,12 +65,13 @@ const getNewPlaylist = (playlistId, setPlaylist) =>
       console.error(error);
     });
 
-const getPlaylist = (playlistId, getSavedPlaylist, setPlaylist) => {
+const getPlaylist = (playlistId, getSavedPlaylist, setPlaylist, youtubeKey) => {
   const playlist = getSavedPlaylist(playlistId);
-  if (playlist) {
+  if (playlist || youtubeKey) {
+    console.error('no playlist to be found');
     return;
   }
-  getNewPlaylist(playlistId, setPlaylist);
+  getNewPlaylist(playlistId, setPlaylist, youtubeKey);
 };
 
 const Thumbnail = styled('div')`
@@ -85,27 +87,54 @@ const App = () => {
   const context = React.useContext(CourseContext);
 
   const [playlistId, updatePlaylistId] = React.useState(
-    'PLZz6paDarXRlHVK272ZhQI78tQOhvljv8'
+    context.playlist.id || ''
+  );
+  const [youtubeKey, updateAPIKey] = React.useState(
+    process.env.YOUTUBE_API_KEY
   );
 
   const updatePlaylist = () =>
-    getPlaylist(playlistId, context.getSavedPlaylist, context.setNewPlaylist);
+    getPlaylist(
+      playlistId,
+      context.getSavedPlaylist,
+      context.setNewPlaylist,
+      youtubeKey
+    );
   return (
     <ListWrapper className="Playlist Column">
-      <Heading>Playlist</Heading>
-      <input
-        onChange={e => updatePlaylistId(e.target.value)}
-        value={playlistId}
-      />
-      <button type="button" onClick={updatePlaylist}>
-        Fetch playlist
-      </button>
+      <Heading
+        settingsView={
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              updatePlaylist();
+            }}
+          >
+            <div>
+              <input
+                onChange={e => updatePlaylistId(e.target.value)}
+                value={playlistId}
+                placeholder="Playlist Id"
+              />
+            </div>
+            <div>
+              <input
+                onChange={e => updateAPIKey(e.target.value)}
+                value={youtubeKey}
+                placeholder="Youtube API Key"
+              />
+            </div>
+            <button type="submit">Fetch playlist</button>
+          </form>
+        }
+      >
+        Playlist
+      </Heading>
       <List>
         {context.playlist &&
           context.playlist.order.map((vidKey, idx) => {
             const {
               title,
-              description,
               thumbnail,
               videoId,
               duration
