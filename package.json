@@ -9,6 +9,7 @@
     "lint": "./node_modules/.bin/eslint src/ ",
     "pretty-quick": "./node_modules/.bin/pretty-quick --staged",
     "build": "webpack --mode production",
+    "netlify": "node ./create-env.js && npm run build",
     "start": "webpack-dev-server --open --mode development"
   },
   "keywords": [],
