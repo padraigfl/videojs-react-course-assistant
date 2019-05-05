@@ -89,7 +89,7 @@ const Thumbnail = styled('div')`
   margin-right: ${spacings.xs}px;
 `;
 
-const App = () => {
+const Playlist = props => {
   const context = React.useContext(CourseContext);
 
   const [playlistId, updatePlaylistId] = React.useState(
@@ -107,7 +107,9 @@ const App = () => {
       youtubeKey
     );
   return (
-    <ListWrapper className="Playlist Column">
+    <ListWrapper
+      className={`Playlist Column ${props.isActive ? 'Column--selected' : ''}`}
+    >
       <Heading
         settingsView={
           <form
@@ -170,4 +172,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Playlist;

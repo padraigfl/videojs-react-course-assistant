@@ -46,14 +46,19 @@ const downloadNotes = (notes, playlist) => {
   document.body.removeChild(a);
 };
 
-const Notes = () => {
+const Notes = props => {
   const context = React.useContext(CourseContext);
   const [activeNote, selectNote] = React.useState();
 
   const dlNotes = () => downloadNotes(context.notes, context.playlist);
 
   return (
-    <ListWrapper className={cx('Notes Column', main)}>
+    <ListWrapper
+      className={cx(
+        `Notes Column  ${props.isActive ? 'Column--selected' : ''}`,
+        main
+      )}
+    >
       <Heading
         settingsView={
           <div>

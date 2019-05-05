@@ -16,9 +16,9 @@ WIP https://react-coursebuilder.netlify.com/ (please don't abuse the API key)
 - [x] Autoplays through playlist
 - [x] Takes notes and bookmarks with correct timestamping (context handling added, bookmark = empty note)
 - [x] Saves notes relative to a specific playlist to localStorage (should be working once integrated)
-- [ ] Mobile view
-- [ ] Control panel to control speed and view
+- [x] Mobile view (lazy initial effort)
 - [x] Download notes in a friendly format (csv? Json? what's good?)
+- [ ] Dont allow notes with same timestamp (no 0.000 options?)
 
 ## Further afield
 

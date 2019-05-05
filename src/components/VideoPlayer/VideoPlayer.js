@@ -7,20 +7,17 @@ import CourseContext from '../../context';
 import { Heading } from '../styledShared';
 import { spacings, colors } from '../../constants/styles';
 
-const border = `${spacings.xs}px solid ${colors.dark2}`;
-
 const VideoWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  border-left: ${border};
-  border-right: ${border};
+  margin: 0px 4px;
 `;
 
 const Description = styled('div')`
   overflow: scroll;
   background-color: ${colors.dark1};
-  colors: ${colors.accent};
+  color: ${colors.accent};
   padding: ${spacings.s}px;
   margin-top: ${spacings.xs}px;
   flex-grow: 1;
@@ -58,7 +55,11 @@ export default class Video extends React.Component {
     console.log(this.videoRef.current);
     const currentId = this.context.getCurrentlyPlayingId();
     return (
-      <VideoWrapper className="Video Column">
+      <VideoWrapper
+        className={`Video Column ${
+          this.props.isActive ? 'Column--selected' : ''
+        }`}
+      >
         <Heading>
           {currentId
             ? this.context.playlist.items[currentId].title

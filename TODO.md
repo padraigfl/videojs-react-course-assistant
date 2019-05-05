@@ -18,6 +18,7 @@ Post MVP
 - [ ] custom playlists (multiple sources? JSON plugin?)
 - [ ] autoscroll through notes (highlight most recent active)
 - [ ] edit notes (modal)
+- [ ] Control panel to control speed and view
 
 Post YouTube split
 

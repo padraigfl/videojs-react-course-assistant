@@ -5,15 +5,17 @@ export const ListWrapper = styled('div')`
   max-width: 350px;
   width: 30%;
   min-width: 250px;
-  height: 100%;
   overflow-y: scroll;
   background-color: ${colors.dark1};
   display: flex;
   flex-direction: column;
+  margin: 0px 4px;
+  max-height: 100%;
 `;
 
 export const List = styled('div')`
   overflow: scroll;
+  max-height: 100%;
 `;
 
 export const ListEntry = styled('div')`
