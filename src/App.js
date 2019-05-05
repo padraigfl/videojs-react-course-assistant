@@ -64,6 +64,13 @@ const bodyStyle = css`
   }
 `;
 
+const viewButtonStyle = css`
+  display: none;
+  @media (max-width: 1000px) and (max-height: 999px) {
+    display: flex;
+  }
+`;
+
 const ViewOption = ({ value = '', update }) => (
   <button type="button" onClick={() => update(value)}>
     {value[0].toUpperCase()}
@@ -77,7 +84,7 @@ const App = () => {
     <CourseProvider>
       <div className={banner}>
         courseBuilder
-        <div>
+        <div className={viewButtonStyle}>
           {keys.map(k => (
             <ViewOption value={k} update={updateActive} />
           ))}

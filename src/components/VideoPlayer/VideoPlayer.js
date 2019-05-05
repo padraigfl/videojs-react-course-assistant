@@ -1,5 +1,6 @@
 import React from 'react';
 // import VideoComponent from 'videojs-react';
+import { css } from 'linaria';
 import { styled } from 'linaria/react';
 import VideoComponent from './Video';
 
@@ -14,13 +15,18 @@ const VideoWrapper = styled('div')`
   margin: 0px 4px;
 `;
 
+const videoStyles = css`
+  flex-grow: 1;
+  width: 100%;
+`;
+
 const Description = styled('div')`
   overflow: scroll;
   background-color: ${colors.dark1};
   color: ${colors.accent};
   padding: ${spacings.s}px;
   margin-top: ${spacings.xs}px;
-  flex-grow: 1;
+  height: 200px;
 `;
 
 export default class Video extends React.Component {
@@ -65,7 +71,11 @@ export default class Video extends React.Component {
             ? this.context.playlist.items[currentId].title
             : 'Coursebuilder'}
         </Heading>
-        <VideoComponent innerRef={this.videoRef} accessVideo={this.setVideo} />
+        <VideoComponent
+          className={videoStyles}
+          innerRef={this.videoRef}
+          accessVideo={this.setVideo}
+        />
         <Description>{this.currentDescription()}</Description>
       </VideoWrapper>
     );

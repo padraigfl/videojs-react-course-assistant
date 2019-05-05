@@ -3,7 +3,7 @@ import React from 'react';
 class VideoPlayer extends React.Component {
   static defaultProps = {
     id: 'vid1',
-    className: 'video-js vjs-default-skin vjs-16-9',
+    className: 'vjs-16-9',
     // width: '640',
     // height: '360',
     setup: {
@@ -94,7 +94,7 @@ class VideoPlayer extends React.Component {
           preload="auto"
           {...rest}
           ref={this.props.innerRef}
-          className={`video-js ${className}`}
+          className={`video-js video-js vjs-default-skin ${className}`}
         />
       </div>
     );
