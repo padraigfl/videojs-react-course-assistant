@@ -18,6 +18,9 @@ const VideoWrapper = styled('div')`
 const videoStyles = css`
   flex-grow: 1;
   width: 100%;
+  @media (max-width: 1000px) and (min-height: 1000px) {
+    min-height: 50vh;
+  }
 `;
 
 const Description = styled('div')`
