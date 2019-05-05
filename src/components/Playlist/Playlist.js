@@ -65,10 +65,14 @@ const getNewPlaylist = (playlistId, setPlaylist, youtubeKey) =>
       console.error(error);
     });
 
-const getPlaylist = (playlistId, getSavedPlaylist, setPlaylist, youtubeKey) => {
-  const playlist = getSavedPlaylist(
-    playlistId.replace(/.*list=/, '').replace(/&.*/, '')
-  );
+const getPlaylist = (
+  playlistUrl,
+  getSavedPlaylist,
+  setPlaylist,
+  youtubeKey
+) => {
+  const playlistId = playlistUrl.replace(/.*list=/, '').replace(/&.*/, '');
+  const playlist = getSavedPlaylist();
   if (playlist) {
     console.error('no playlist to be found');
     return;
