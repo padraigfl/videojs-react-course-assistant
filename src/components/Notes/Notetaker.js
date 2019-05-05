@@ -3,7 +3,6 @@ import { styled } from 'linaria/react';
 
 import CourseContext from '../../context';
 import { colors, spacings } from '../../constants/styles';
-import { formatTime } from '../../helpers';
 
 const NoteWrapper = styled('div')`
   display: flex;
@@ -15,9 +14,18 @@ const NoteWrapper = styled('div')`
 const TextArea = styled('textarea')`
   height: 100px;
   background-color: ${colors.accent};
+  flex-grow: 1;
+`;
+const NoteForm = styled('div')`
+  display: flex;
 `;
 const NoteActions = styled('div')`
+  font-weight: bold;
   display: flex;
+  flex-direction: column;
+  button {
+    flex-grow: 1;
+  }
 `;
 
 const Notetaker = props => {
@@ -28,68 +36,70 @@ const Notetaker = props => {
   const [time, updateTime] = React.useState(propNote.time || 0);
   const [video, updateVideo] = React.useState(propNote.video || 0);
 
+  const submitNote = e => {
+    if (!e.shiftKey && e.which === 13) {
+      e.preventDefault();
+      context.alterNotes.add(
+        {
+          time,
+          text
+        },
+        context.playlist.order[video]
+      );
+      updateTime(null);
+      updateNote('');
+      textEl.current.blur();
+    }
+  };
+
   return (
     <NoteWrapper>
-      <TextArea
-        onFocus={() => {
-          if (!text) {
-            updateTime(context.video.currentTime());
-            updateVideo(context.currentlyPlaying.video);
-          }
-        }}
-        ref={textEl}
-        onKeyPress={e => {
-          if (!e.shiftKey && e.which === 13) {
-            e.preventDefault();
-            context.alterNotes.add(
-              {
-                time,
-                text
-              },
-              context.playlist.order[video]
-            );
-            updateTime(null);
-            updateNote('');
-            textEl.current.blur();
-          }
-        }}
-        onChange={e => updateNote(e.target.value)}
-        value={text}
-      />
-
-      {typeof video === 'number' && typeof time !== 'undefined' ? (
-        <div>
-          Video:{' '}
-          {context.playlist.items &&
-            context.playlist.items[context.getCurrentlyPlayingId()].title}{' '}
-          | Time: {formatTime(time)}
-        </div>
-      ) : null}
-      <NoteActions>
-        <button
-          type="button"
-          onClick={() => {
-            updateVideo(context.currentlyPlaying.video);
-            updateTime(context.video.currentTime());
+      <NoteForm>
+        <TextArea
+          onFocus={() => {
+            if (!text) {
+              updateTime(context.video.currentTime());
+              updateVideo(context.currentlyPlaying.video);
+            }
           }}
-        >
-          Set Current Time
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            context.alterNotes.add(
-              {
-                time: context.video.currentTime()
-              },
-              context.playlist.order[context.currentlyPlaying.video]
-            )
-          }
-          disabled={!context.video}
-        >
-          Bookmark
-        </button>
-      </NoteActions>
+          ref={textEl}
+          onKeyPress={submitNote}
+          onChange={e => updateNote(e.target.value)}
+          value={text}
+        />
+        <NoteActions>
+          <button
+            type="button"
+            onClick={() =>
+              context.alterNotes.add(
+                {
+                  time: context.video.currentTime()
+                },
+                context.playlist.order[context.currentlyPlaying.video]
+              )
+            }
+            disabled={!context.video}
+          >
+            Bookmark
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              updateVideo(context.currentlyPlaying.video);
+              updateTime(context.video.currentTime());
+            }}
+          >
+            Reset Time
+          </button>
+          <button
+            type="button"
+            disabled={!text || text === ''}
+            onClick={submitNote}
+          >
+            Add Note
+          </button>
+        </NoteActions>
+      </NoteForm>
     </NoteWrapper>
   );
 };

@@ -7,7 +7,7 @@ export const ListWrapper = styled('div')`
   min-width: 250px;
   height: 100%;
   overflow-y: scroll;
-  background-color: ${colors.light};
+  background-color: ${colors.dark1};
   display: flex;
   flex-direction: column;
 `;
@@ -21,13 +21,14 @@ export const ListEntry = styled('div')`
   max-height: 100px;
   margin: ${spacings.xs}px;
   margin-top: ${spacings.s}px;
+  background-color: ${colors.dark1};
   overflow: hidden;
   a {
     display: block;
     color: ${colors.brand};
     font-weight: bold;
     &:hover {
-      color: ${colors.dark2};
+      color: ${colors.accent};
     }
   }
 `;

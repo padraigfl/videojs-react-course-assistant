@@ -16,8 +16,12 @@ Post MVP
 - [ ] Subtitles
 - [ ] More info (e.g. length of playlist, amount already played, resume from point stopped, etc)
 - [ ] custom playlists (multiple sources? JSON plugin?)
+- [ ] autoscroll through notes (highlight most recent active)
+- [ ] edit notes (modal)
 
 Post YouTube split
 
+- [ ] Server/database/something
+- [ ] Admin mode
 - [ ] Ability to add captions (same format as notes)
 - [ ] Electron App Exploration

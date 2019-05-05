@@ -2,7 +2,9 @@
 
 Uses dotenv, please copy the .env.template and to .env and use a valid API key for youtube. Initial load will not fire a youtube request but uses preloaded data.
 
-WIP https://react-coursebuilder.netlify.com/ (env variables not yet set)
+This current buid depends on the videojs cdn loading
+
+WIP https://react-coursebuilder.netlify.com/ (please don't abuse the API key)
 
 ## Initial Goals
 

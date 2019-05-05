@@ -7,8 +7,8 @@ import { colors, spacings } from './constants/styles';
 import Notes from './components/Notes';
 
 const bodyStyle = css`
-  background-color: ${colors.dark2};
-  color: ${colors.dark1};
+  background-color: #111;
+  color: ${colors.accent};
   margin: ${spacings.xs}px;
   display: flex;
   height: calc(100vh - ${spacings.xs * 2}px);
@@ -16,7 +16,7 @@ const bodyStyle = css`
   :global() {
     body {
       font-family: Arial;
-      background-color: ${colors.dark1};
+      background-color: ${colors.dark2};
       margin: 0px;
     }
   }

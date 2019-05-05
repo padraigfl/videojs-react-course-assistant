@@ -19,7 +19,8 @@ const VideoWrapper = styled('div')`
 
 const Description = styled('div')`
   overflow: scroll;
-  background-color: ${colors.light};
+  background-color: ${colors.dark1};
+  colors: ${colors.accent};
   padding: ${spacings.s}px;
   margin-top: ${spacings.xs}px;
   flex-grow: 1;
@@ -58,7 +59,7 @@ export default class Video extends React.Component {
     const currentId = this.context.getCurrentlyPlayingId();
     return (
       <VideoWrapper className="Video Column">
-        <Heading className="invert">
+        <Heading>
           {currentId
             ? this.context.playlist.items[currentId].title
             : 'Coursebuilder'}
