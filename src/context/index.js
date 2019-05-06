@@ -38,7 +38,10 @@ export class CourseProvider extends Component {
         video: 0, // index in array
         position: 0
       },
-      video: null
+      video: null,
+      savedPlaylists: JSON.parse(
+        window.localStorage.getItem('savedPlaylists') || '[]'
+      )
     };
   }
 
@@ -71,6 +74,22 @@ export class CourseProvider extends Component {
         currentlyPlaying: this.state.currentlyPlaying
       })
     );
+    const playlists = JSON.parse(
+      window.localStorage.getItem('savedPlaylists') || '[]'
+    );
+    if (this.state.playlist.id && !playlists.includes(this.state.playlist.id)) {
+      this.setState(
+        state => ({
+          savedPlaylists: [...state.savedPlaylists, state.playlist.id]
+        }),
+        () => {
+          window.localStorage.setItem(
+            'savedPlaylists',
+            JSON.stringify(this.state.savedPlaylists)
+          );
+        }
+      );
+    }
   };
 
   setNewPlaylist = playlist => {
@@ -176,7 +195,11 @@ export class CourseProvider extends Component {
     this.state.video.play();
     this.state.video.currentTime(position);
 
-    this.setState({ currentlyPlaying: { video, position } });
+    this.setState({ currentlyPlaying: { video, position } }, () => {
+      this.state.video.poster(
+        this.state.playlist.items[this.getCurrentlyPlayingId()].posterImage
+      );
+    });
   };
 
   // @todo timer before autoplay

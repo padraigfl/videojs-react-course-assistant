@@ -86,7 +86,7 @@ const App = () => {
         courseBuilder
         <div className={viewButtonStyle}>
           {keys.map(k => (
-            <ViewOption value={k} update={updateActive} />
+            <ViewOption key={k} value={k} update={updateActive} />
           ))}
         </div>
       </div>
