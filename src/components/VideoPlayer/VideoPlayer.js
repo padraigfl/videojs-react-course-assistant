@@ -12,7 +12,10 @@ const VideoWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin: 0px 4px;
+  @media (min-width: 1000px) and (min-height: 1000px) {
+    min-height: 50vh;
+    margin: 0px 4px;
+  }
 `;
 
 const videoStyles = css`

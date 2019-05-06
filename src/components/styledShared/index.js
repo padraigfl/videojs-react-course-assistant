@@ -47,3 +47,9 @@ export const Heading = styled('div')`
     background-color: ${colors.light};
   }
 `;
+
+export const EllipsisTextLine = styled('div')`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;

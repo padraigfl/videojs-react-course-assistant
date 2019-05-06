@@ -5,7 +5,12 @@ import CourseContext from '../../context';
 import Notetaker from './Notetaker';
 import { colors, spacings } from '../../constants/styles';
 
-import { ListWrapper, List, ListEntry } from '../styledShared';
+import {
+  ListWrapper,
+  List,
+  ListEntry,
+  EllipsisTextLine
+} from '../styledShared';
 import { formatTime } from '../../helpers';
 import Heading from '../Heading/Heading';
 
@@ -80,7 +85,7 @@ const Notes = props => {
           </div>
         }
       >
-        Notes &amp; Bookmarks
+        <EllipsisTextLine>Notes &amp; Bookmarks</EllipsisTextLine>
       </Heading>
       <List>
         {context.playlist.order.map(vidId =>

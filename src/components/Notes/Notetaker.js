@@ -37,7 +37,7 @@ const Notetaker = props => {
   const [video, updateVideo] = React.useState(propNote.video || 0);
 
   const submitNote = e => {
-    if (!e.shiftKey && e.which === 13) {
+    if (e.type === 'click' || (!e.shiftKey && e.which === 13)) {
       e.preventDefault();
       context.alterNotes.add(
         {
