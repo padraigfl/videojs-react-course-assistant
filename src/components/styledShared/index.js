@@ -9,7 +9,6 @@ export const ListWrapper = styled('div')`
   background-color: ${colors.dark1};
   display: flex;
   flex-direction: column;
-  margin: 0px 4px;
   max-height: 100%;
 `;
 
@@ -21,8 +20,8 @@ export const List = styled('div')`
 export const ListEntry = styled('div')`
   display: flex;
   max-height: 100px;
-  margin: ${spacings.xs}px;
-  margin-top: ${spacings.s}px;
+  padding: ${spacings.xs}px;
+  box-shadow: 0px 0px 0px 1px ${colors.accent};
   background-color: ${colors.dark1};
   overflow: hidden;
   a {

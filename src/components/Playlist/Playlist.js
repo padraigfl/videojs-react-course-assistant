@@ -2,7 +2,11 @@ import React from 'react';
 import { styled } from 'linaria/react';
 import { spacings } from '../../constants/styles';
 import { formatTime, ytTimeToSeconds } from '../../helpers';
-import { fetchPlaylistItems, fetchVideoDetails } from '../../api/youtube';
+import {
+  fetchPlaylistItems,
+  fetchVideoDetails,
+  fetchPlaylist
+} from '../../api/youtube';
 
 import { ListWrapper, ListEntry, List } from '../styledShared';
 import CourseContext from '../../context';
@@ -20,7 +24,7 @@ if (!process.env.YOUTUBE_API_KEY) {
 //   }))
 // });
 
-const formatPlaylistResponse = (resp, id) => ({
+const formatPlaylistResponse = (resp, id, playlistInfo = {}) => ({
   total: resp.pageInfo.totalResults,
   items: resp.items.reduce(
     (acc, { snippet }) => ({
@@ -38,28 +42,35 @@ const formatPlaylistResponse = (resp, id) => ({
     {}
   ),
   id,
+  ...playlistInfo,
   order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
 });
 
 const getNewPlaylist = (playlistId, setPlaylist, youtubeKey) =>
-  fetchPlaylistItems(playlistId, youtubeKey)
-    .then(result => {
-      const formattedResult = formatPlaylistResponse(result, playlistId);
-      return fetchVideoDetails(formattedResult.order.join(','), youtubeKey)
-        .then(vidDetails => {
-          vidDetails.items.forEach(item => {
-            formattedResult.items[item.id] = {
-              ...formattedResult.items[item.id],
-              ...item.contentDetails,
-              duration: ytTimeToSeconds(item.contentDetails.duration)
-            };
+  fetchPlaylist(playlistId, youtubeKey)
+    .then(({ items: [{ snippet }] }) => {
+      fetchPlaylistItems(playlistId, youtubeKey).then(result => {
+        const formattedResult = formatPlaylistResponse(
+          result,
+          playlistId,
+          snippet
+        );
+        return fetchVideoDetails(formattedResult.order.join(','), youtubeKey)
+          .then(vidDetails => {
+            vidDetails.items.forEach(item => {
+              formattedResult.items[item.id] = {
+                ...formattedResult.items[item.id],
+                ...item.contentDetails,
+                duration: ytTimeToSeconds(item.contentDetails.duration)
+              };
+            });
+            setPlaylist(formattedResult);
+          })
+          .catch(error => {
+            console.error(error);
+            setPlaylist(result);
           });
-          setPlaylist(formattedResult);
-        })
-        .catch(error => {
-          console.error(error);
-          setPlaylist(result);
-        });
+      });
     })
     .catch(error => {
       console.error(error);
@@ -89,63 +100,64 @@ const Thumbnail = styled('div')`
   margin-right: ${spacings.xs}px;
 `;
 
+const Form = styled(`div`)`
+  margin: ${spacings.xs}px 0px ${spacings.s}px;
+`;
+
 const Playlist = props => {
   const context = React.useContext(CourseContext);
 
   const [playlistId, updatePlaylistId] = React.useState(
     context.playlist.id || ''
   );
-  const [youtubeKey, updateAPIKey] = React.useState(
-    process.env.YOUTUBE_API_KEY || ''
-  );
 
   const updatePlaylist = () =>
-    getPlaylist(
-      playlistId,
-      context.getSavedPlaylist,
-      context.setNewPlaylist,
-      youtubeKey
-    );
+    getPlaylist(playlistId, context.getSavedPlaylist, context.setNewPlaylist);
   return (
     <ListWrapper
       className={`Playlist Column ${props.isActive ? 'Column--selected' : ''}`}
     >
       <Heading
         settingsView={
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              updatePlaylist();
-            }}
-          >
-            <div>
-              <input
-                onChange={e => updatePlaylistId(e.target.value)}
-                value={playlistId}
-                placeholder="Playlist Id"
-              />
-            </div>
-            <div>
-              <input
-                onChange={e => updateAPIKey(e.target.value)}
-                value={youtubeKey}
-                placeholder="Youtube API Key"
-              />
-            </div>
-            <button type="submit">Fetch playlist</button>
-            <select
-              onChange={e => {
-                e.preventDefault();
-                context.getSavedPlaylist(e.target.value);
-              }}
-            >
-              {context.savedPlaylists.map(v => (
-                <option key={v} value={v}>
-                  {v}
+          <>
+            <Form>
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  updatePlaylist();
+                }}
+              >
+                <h4>Add New Playlist</h4>
+                <input
+                  onChange={e => updatePlaylistId(e.target.value)}
+                  value={playlistId}
+                  placeholder="Playlist Id"
+                />
+                <button type="submit">Fetch playlist</button>
+              </form>
+            </Form>
+            <Form>
+              <h4>Select Existing Playlist</h4>
+              <p>
+                <em>Dont worry, your existing notes should be saved</em>
+              </p>
+              <select
+                onChange={e => {
+                  e.preventDefault();
+                  context.getSavedPlaylist(e.target.value);
+                }}
+              >
+                <option value="" disabled selected>
+                  Select saved playlist
                 </option>
-              ))}
-            </select>
-          </form>
+                {Object.keys(context.savedPlaylists).map(v => (
+                  <option key={v} value={v}>
+                    {context.savedPlaylists[v].title}
+                  </option>
+                ))}
+              </select>
+            </Form>
+          </>
         }
       >
         Playlist

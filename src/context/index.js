@@ -26,6 +26,7 @@ export class CourseProvider extends Component {
     super(props);
 
     // @todo, tidyup local storage search
+
     const { playlist, notes, currentlyPlaying } =
       this.getSavedPlaylist(this.props.playlist.id) || {};
 
@@ -40,7 +41,7 @@ export class CourseProvider extends Component {
       },
       video: null,
       savedPlaylists: JSON.parse(
-        window.localStorage.getItem('savedPlaylists') || '[]'
+        window.localStorage.getItem('savedPlaylists') || '{}'
       )
     };
   }
@@ -75,12 +76,19 @@ export class CourseProvider extends Component {
       })
     );
     const playlists = JSON.parse(
-      window.localStorage.getItem('savedPlaylists') || '[]'
+      window.localStorage.getItem('savedPlaylists') || '{}'
     );
-    if (this.state.playlist.id && !playlists.includes(this.state.playlist.id)) {
+    if (
+      this.state.playlist.id &&
+      !Object.keys(playlists).includes(this.state.playlist.id)
+    ) {
+      const { items, order, ...playlistInfo } = this.state.playlist;
       this.setState(
         state => ({
-          savedPlaylists: [...state.savedPlaylists, state.playlist.id]
+          savedPlaylists: {
+            ...state.savedPlaylists,
+            [state.playlist.id]: playlistInfo
+          }
         }),
         () => {
           window.localStorage.setItem(
@@ -120,6 +128,14 @@ export class CourseProvider extends Component {
         );
         return;
       }
+
+      if (list.some(entry => entry.time === time)) {
+        console.error(
+          'Currently cannot support multiple entries with same time'
+        );
+        return;
+      }
+
       const insertionIndex = list.findIndex(entry => entry.time >= time);
       this.setState(
         state => ({
@@ -181,6 +197,12 @@ export class CourseProvider extends Component {
   getCurrentlyPlayingId = () =>
     this.state.playlist.order[this.state.currentlyPlaying.video];
 
+  // @todo probably quite hacky
+  setTime = () => {
+    this.state.video.currentTime(this.state.currentlyPlaying.position);
+    this.state.video.off('play', this.setTime);
+  };
+
   setTrack = (video, position = 0) => {
     const source = this.getSrc(video);
     if (!source) {
@@ -191,9 +213,9 @@ export class CourseProvider extends Component {
       type: 'video/youtube',
       src: source
     });
+    this.state.video.on('play', this.setTime);
     // @todo update thumbnail
     this.state.video.play();
-    this.state.video.currentTime(position);
 
     this.setState({ currentlyPlaying: { video, position } }, () => {
       this.state.video.poster(

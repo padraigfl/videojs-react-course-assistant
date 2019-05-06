@@ -1,6 +1,6 @@
 Functionality
 
-- [ ] Update poster for individual videos
+- [x] Update poster for individual videos
 - [ ] Playback settings (just speed initially)
 - [ ] On click bookmark go to point in video
 
@@ -8,7 +8,7 @@ Style
 
 - [ ] Forms standardisation
 - [ ] Buttons (hover on delete and that kind of thing, more tactful bookmarking)
-- [ ] Responsive design
+- [x] Responsive design (untested, fullscreen issues on iOS)
 
 Post MVP
 
@@ -26,3 +26,5 @@ Post YouTube split
 - [ ] Admin mode
 - [ ] Ability to add captions (same format as notes)
 - [ ] Electron App Exploration
+
+Also see numerous @todo comments scattered across project
