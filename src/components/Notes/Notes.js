@@ -14,6 +14,18 @@ const main = css`
   flex-direction: column;
 `;
 
+const DeleteButton = styled('button')`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: ${colors.light};
+  border: none;
+  outline: none;
+  font-size: 20px;
+  background-color: transparent;
+  padding-top: ${spacings.xs / 2}px;
+`;
+
 const downloadNotes = (notes, playlist) => {
   const a = document.createElement('a');
   a.style.display = 'none';
@@ -79,6 +91,7 @@ const Notes = props => {
             >
               <div>
                 <a
+                  style={{ paddingRight: '24px' }}
                   href={`https://youtu.be/${vidId}?t=${Math.floor(note.time)}`}
                   onClick={e => {
                     e.preventDefault();
@@ -92,12 +105,12 @@ const Notes = props => {
                   {formatTime(note.time)}
                 </a>
                 {note.text && <div>{note.text}</div>}
-                <button
+                <DeleteButton
                   type="button"
                   onClick={() => context.alterNotes.delete(vidId, idx)}
                 >
-                  Delete
-                </button>
+                  X
+                </DeleteButton>
               </div>
             </ListEntry>
           ))

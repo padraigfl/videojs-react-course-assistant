@@ -18,6 +18,7 @@ export const List = styled('div')`
 `;
 
 export const ListEntry = styled('div')`
+  position: relative;
   display: flex;
   max-height: 100px;
   padding: ${spacings.xs}px;
