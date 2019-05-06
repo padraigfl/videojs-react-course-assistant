@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { styled } from 'linaria/react';
 import { colors, spacings } from '../../constants/styles';
+import { CancelButton } from '../styledShared';
 
 const Overlay = styled('div')`
   position: absolute;
@@ -14,6 +15,7 @@ const Overlay = styled('div')`
   display: flex;
 `;
 const Settings = styled('div')`
+  position: relative;
   background-color: ${colors.light};
   margin: auto;
   width: 90%;
@@ -28,6 +30,12 @@ const SettingsModal = props => {
         <Overlay onClick={props.onClose}>
           <Settings onClick={e => e.stopPropagation()}>
             {props.children}
+            <CancelButton
+              style={{ color: colors.dark2 }}
+              onClick={props.onClose}
+            >
+              X
+            </CancelButton>
           </Settings>
         </Overlay>,
         document.getElementById('settings')

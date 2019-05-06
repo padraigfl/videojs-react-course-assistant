@@ -1,15 +1,14 @@
 import React from 'react';
 import { css, cx } from 'linaria';
-import { styled } from 'linaria/react';
 import CourseContext from '../../context';
 import Notetaker from './Notetaker';
-import { colors, spacings } from '../../constants/styles';
 
 import {
   ListWrapper,
   List,
   ListEntry,
-  EllipsisTextLine
+  EllipsisTextLine,
+  CancelButton
 } from '../styledShared';
 import { formatTime } from '../../helpers';
 import Heading from '../Heading/Heading';
@@ -17,18 +16,6 @@ import Heading from '../Heading/Heading';
 const main = css`
   display: flex;
   flex-direction: column;
-`;
-
-const DeleteButton = styled('button')`
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  color: ${colors.light};
-  border: none;
-  outline: none;
-  font-size: 20px;
-  background-color: transparent;
-  padding-top: ${spacings.xs / 2}px;
 `;
 
 const downloadNotes = (notes, playlist) => {
@@ -110,12 +97,12 @@ const Notes = props => {
                   {formatTime(note.time)}
                 </a>
                 {note.text && <div>{note.text}</div>}
-                <DeleteButton
+                <CancelButton
                   type="button"
                   onClick={() => context.alterNotes.delete(vidId, idx)}
                 >
                   X
-                </DeleteButton>
+                </CancelButton>
               </div>
             </ListEntry>
           ))

@@ -53,3 +53,15 @@ export const EllipsisTextLine = styled('div')`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+export const CancelButton = styled('button')`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: ${colors.light};
+  border: none;
+  outline: none;
+  font-size: 20px;
+  background-color: transparent;
+  padding-top: ${spacings.xs / 2}px;
+`;
