@@ -2,6 +2,7 @@
 .linaria-cache
 node_modules
 dist
+!dist/assets
 
 # Mac files
 .DS_Store

@@ -2,6 +2,7 @@ import React from 'react';
 import { css, cx } from 'linaria';
 import CourseContext from '../../context';
 import Notetaker from './Notetaker';
+import downloadIcon from '../../assets/download.svg';
 
 import {
   ListWrapper,
@@ -67,10 +68,11 @@ const Notes = props => {
         settingsView={
           <div>
             <button type="button" onClick={dlNotes}>
-              Download Notes
+              Download JSON of notes <img src={downloadIcon} alt="download" />
             </button>
           </div>
         }
+        icon={<img src={downloadIcon} alt="download" />}
       >
         <EllipsisTextLine>Notes &amp; Bookmarks</EllipsisTextLine>
       </Heading>
@@ -78,7 +80,7 @@ const Notes = props => {
         {context.playlist.order.map(vidId =>
           (context.notes[vidId] || []).map((note, idx) => (
             <ListEntry
-              key={`${note.text}${note.time}`}
+              key={note.id || `${note.text}${note.time}`}
               onClick={() => selectNote(note)}
             >
               <div>

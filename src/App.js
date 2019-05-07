@@ -1,14 +1,14 @@
 import React from 'react';
 import { css } from 'linaria';
-import { styled } from 'linaria/react';
 import Playlist from './components/Playlist';
 import VideoPlayer from './components/VideoPlayer';
 import { CourseProvider } from './context';
 import { colors, spacings } from './constants/styles';
 import Notes from './components/Notes';
 import Heading from './components/Heading/Heading';
-
-const margin = spacings.xs;
+import notebookIcon from './assets/notebook.svg';
+import playlistIcon from './assets/playlist.svg';
+import playIcon from './assets/play.svg';
 
 const banner = css`
   display: flex;
@@ -88,13 +88,13 @@ const viewButtonStyle = css`
   }
 `;
 
-const ViewOption = ({ value = '', update, active }) => (
+const ViewOption = ({ icon, value = '', update, active }) => (
   <button
     type="button"
     onClick={() => update(value)}
     disabled={active === value}
   >
-    {value[0].toUpperCase()}
+    <img src={icon} alt={value} />
   </button>
 );
 
@@ -104,9 +104,14 @@ const Link = props => (
   </a>
 );
 
-const keys = ['playlist', 'video', 'notes'];
+const keys = [
+  { value: 'playlist', icon: playlistIcon },
+  { value: 'video', icon: playIcon },
+  { value: 'notes', icon: notebookIcon }
+];
+
 const App = () => {
-  const [active, updateActive] = React.useState(keys[0]);
+  const [active, updateActive] = React.useState(keys[0].value);
   return (
     <CourseProvider>
       <Heading
@@ -172,8 +177,9 @@ const App = () => {
         <div className={viewButtonStyle}>
           {keys.map(k => (
             <ViewOption
-              key={k}
-              value={k}
+              key={k.value}
+              value={k.value}
+              icon={k.icon}
               update={updateActive}
               active={active}
             />

@@ -1,4 +1,5 @@
 import React, { Component, createContext } from 'react';
+import nanoid from 'nanoid';
 
 import { filmish as dummyPlaylist } from '../constants/dummy';
 
@@ -129,13 +130,6 @@ export class CourseProvider extends Component {
         return;
       }
 
-      if (list.some(entry => entry.time === time)) {
-        console.error(
-          'Currently cannot support multiple entries with same time'
-        );
-        return;
-      }
-
       const insertionIndex = list.findIndex(entry => entry.time >= time);
       this.setState(
         state => ({
@@ -145,6 +139,7 @@ export class CourseProvider extends Component {
               state[key][vidId],
               insertionIndex !== -1 ? insertionIndex : arrayLength,
               {
+                id: nanoid(),
                 text,
                 time
               }

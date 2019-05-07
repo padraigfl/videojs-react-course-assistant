@@ -46,6 +46,9 @@ export const Heading = styled('div')`
     color: ${colors.brand};
     background-color: ${colors.light};
   }
+  @media (max-width: 500px) {
+    font-size: ${spacings.s}px;
+  }
 `;
 
 export const EllipsisTextLine = styled('div')`

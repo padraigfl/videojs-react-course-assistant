@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'linaria/react';
-import { spacings } from '../../constants/styles';
+import { spacings, colors } from '../../constants/styles';
 import { formatTime, ytTimeToSeconds } from '../../helpers';
 import {
   fetchPlaylistItems,
@@ -104,6 +104,11 @@ const Form = styled(`div`)`
   margin: ${spacings.xs}px 0px ${spacings.s}px;
 `;
 
+const ChangePlaylist = styled('div')`
+  color: ${colors.dark2};
+  font-size: 1rem;
+`;
+
 const Playlist = props => {
   const context = React.useContext(CourseContext);
 
@@ -118,6 +123,7 @@ const Playlist = props => {
       className={`Playlist Column ${props.isActive ? 'Column--selected' : ''}`}
     >
       <Heading
+        icon={<ChangePlaylist>Change</ChangePlaylist>}
         settingsView={
           <>
             <Form>
@@ -162,6 +168,7 @@ const Playlist = props => {
       >
         Playlist
       </Heading>
+      {context.playlist.title && <div>{context.playlist.title}</div>}
       <List>
         {context.playlist &&
           context.playlist.order.map((vidKey, idx) => {

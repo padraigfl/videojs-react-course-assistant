@@ -88,8 +88,9 @@ const Notetaker = props => {
               updateVideo(context.currentlyPlaying.video);
               updateTime(context.video.currentTime());
             }}
+            disabled={!text || text === ''}
           >
-            Reset Time
+            Update Timestamp
           </button>
           <button
             type="button"
