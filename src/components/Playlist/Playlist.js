@@ -84,8 +84,7 @@ const getPlaylist = (
 ) => {
   const playlistId = playlistUrl.replace(/.*list=/, '').replace(/&.*/, '');
   const playlist = getSavedPlaylist();
-  if (!playlist) {
-    console.error('no playlist to be found');
+  if (playlist) {
     return;
   }
   getNewPlaylist(playlistId, setPlaylist, youtubeKey);
