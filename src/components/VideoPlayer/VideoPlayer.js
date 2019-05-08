@@ -81,6 +81,7 @@ export default class Video extends React.Component {
           className={videoStyles}
           innerRef={this.videoRef}
           accessVideo={this.setVideo}
+          playsinline
         />
         <Description>{this.currentDescription()}</Description>
       </VideoWrapper>
