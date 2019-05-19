@@ -1,7 +1,7 @@
 import React from 'react';
-import VideoComponent from 'videojs-react';
 import { css } from 'linaria';
 import { styled } from 'linaria/react';
+import VideoComponent from './_Video';
 
 import CourseContext from '../../context';
 import { Heading } from '../styledShared';
