@@ -3,6 +3,7 @@ import { styled } from 'linaria/react';
 
 import CourseContext from '../../context';
 import { colors, spacings } from '../../constants/styles';
+import { formatTime } from '../../helpers';
 
 const NoteWrapper = styled('div')`
   display: flex;
@@ -10,6 +11,7 @@ const NoteWrapper = styled('div')`
   padding: ${spacings.s}px;
   background-color: ${colors.brand};
   margin-top: auto;
+  position: relative;
 `;
 const TextArea = styled('textarea')`
   height: 100px;
@@ -26,6 +28,16 @@ const NoteActions = styled('div')`
   button {
     flex-grow: 1;
   }
+`;
+const TimeStamp = styled('div')`
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: ${spacings.s}px;
+  font-size: 0.75rem;
+  max-width: calc(100% - ${spacings.s * 2});
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Notetaker = props => {
@@ -100,6 +112,14 @@ const Notetaker = props => {
             Add Note
           </button>
         </NoteActions>
+        {text && time > -1 && (
+          <TimeStamp>
+            {formatTime(time)}
+            {context.playlist.items[video]
+              ? `/${context.playlist.items[video].title}`
+              : undefined}
+          </TimeStamp>
+        )}
       </NoteForm>
     </NoteWrapper>
   );
