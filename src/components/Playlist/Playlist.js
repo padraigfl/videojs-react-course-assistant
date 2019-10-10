@@ -164,6 +164,7 @@ const Playlist = props => {
             </Form>
           </>
         }
+        level={2}
       >
         Playlist
       </Heading>

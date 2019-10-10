@@ -1,7 +1,7 @@
 import { styled } from 'linaria/react';
 import { colors, spacings } from '../../constants/styles';
 
-export const ListWrapper = styled('div')`
+export const ListWrapper = styled('section')`
   max-width: 350px;
   width: 30%;
   min-width: 250px;
@@ -12,12 +12,14 @@ export const ListWrapper = styled('div')`
   max-height: 100%;
 `;
 
-export const List = styled('div')`
+export const List = styled('ul')`
   overflow: scroll;
   max-height: 100%;
+  padding-left: 0px;
+  margin-top: 0px;
 `;
 
-export const ListEntry = styled('div')`
+export const ListEntry = styled('li')`
   position: relative;
   display: flex;
   max-height: 100px;
@@ -35,7 +37,8 @@ export const ListEntry = styled('div')`
   }
 `;
 
-export const Heading = styled('div')`
+export const Header = styled('header')`
+  margin: 0px;
   padding: ${spacings.xs}px;
   font-size: ${spacings.m}px;
   font-weight: bold;

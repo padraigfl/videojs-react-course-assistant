@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'linaria/react';
-import { Heading as StyledHead } from '../styledShared';
+import { Header } from '../styledShared';
 import { colors, spacings } from '../../constants/styles';
 import SettingsModal from './SettingsModal';
 
@@ -19,17 +19,22 @@ const SettingsButton = styled('button')`
 
 const Heading = props => {
   const [modal, toggleModal] = React.useState();
+  const HTag = `h${props.level}`;
   return (
-    <StyledHead className={props.className}>
-      {props.children}
+    <Header className={props.className}>
+      <HTag>{props.children}</HTag>
       <SettingsButton onClick={() => toggleModal(true)}>
         {props.icon || '⚙'}
       </SettingsButton>
       <SettingsModal onClose={() => toggleModal(false)} display={modal}>
         {props.settingsView}
       </SettingsModal>
-    </StyledHead>
+    </Header>
   );
+};
+
+Heading.defaultProps = {
+  level: 5
 };
 
 export default Heading;

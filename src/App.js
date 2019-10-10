@@ -25,6 +25,7 @@ const bodyStyle = css`
   flex-grow: 1;
   position: relative;
   padding: ${spacings.xs}px;
+  justify-content: space-between;
 
   :global() {
     body {
@@ -36,6 +37,16 @@ const bodyStyle = css`
       display: flex;
       flex-direction: column;
       height: 100vh;
+    }
+    h1,
+    h2 {
+      margin: 0px;
+    }
+    h1 {
+      font-size: 1.625rem;
+    }
+    h2 {
+      font-size: 1.375rem;
     }
   }
   @media (max-width: 1000px) and (max-height: 999px) {
@@ -172,20 +183,21 @@ const App = () => {
             </marquee>
           </div>
         }
+        level={1}
       >
         CourseBuilder
-        <div className={viewButtonStyle}>
-          {keys.map(k => (
-            <ViewOption
-              key={k.value}
-              value={k.value}
-              icon={k.icon}
-              update={updateActive}
-              active={active}
-            />
-          ))}
-        </div>
       </Heading>
+      <div className={viewButtonStyle}>
+        {keys.map(k => (
+          <ViewOption
+            key={k.value}
+            value={k.value}
+            icon={k.icon}
+            update={updateActive}
+            active={active}
+          />
+        ))}
+      </div>
       <div className={bodyStyle}>
         <Playlist isActive={active === 'playlist'} />
         <VideoPlayer maxWidth="80%" isActive={active === 'video'} />

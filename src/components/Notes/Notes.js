@@ -73,6 +73,7 @@ const Notes = props => {
           </div>
         }
         icon={<img src={downloadIcon} alt="download" />}
+        level={2}
       >
         <EllipsisTextLine>Notes &amp; Bookmarks</EllipsisTextLine>
       </Heading>

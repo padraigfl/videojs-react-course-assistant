@@ -4,10 +4,10 @@ import { styled } from 'linaria/react';
 import VideoComponent from './_Video';
 
 import CourseContext from '../../context';
-import { Heading } from '../styledShared';
+import { Header } from '../styledShared';
 import { spacings, colors } from '../../constants/styles';
 
-const VideoWrapper = styled('div')`
+const VideoWrapper = styled('section')`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -71,11 +71,13 @@ export default class Video extends React.Component {
           this.props.isActive ? 'Column--selected' : ''
         }`}
       >
-        <Heading>
-          {currentId
-            ? this.context.playlist.items[currentId].title
-            : 'Coursebuilder'}
-        </Heading>
+        <Header>
+          <h2>
+            {currentId
+              ? this.context.playlist.items[currentId].title
+              : 'Coursebuilder'}
+          </h2>
+        </Header>
         <VideoComponent
           className={videoStyles}
           innerRef={this.videoRef}
