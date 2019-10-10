@@ -24,8 +24,15 @@ const bodyStyle = css`
   display: flex;
   flex-grow: 1;
   position: relative;
-  padding: ${spacings.xs}px;
   justify-content: space-between;
+  overflow: hidden;
+
+  @media (min-width: 800px) {
+    padding: ${spacings.xs / 2}px;
+    section {
+      margin: ${spacings.xs / 2}px;
+    }
+  }
 
   :global() {
     body {
@@ -70,6 +77,7 @@ const bodyStyle = css`
   @media (max-width: 1000px) and (min-height: 1000px) {
     height: initial;
     flex-wrap: wrap;
+    overflow: auto;
     .Column.Video {
       order: -1;
       width: 100%;

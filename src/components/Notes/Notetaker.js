@@ -5,7 +5,7 @@ import CourseContext from '../../context';
 import { colors, spacings } from '../../constants/styles';
 import { formatTime } from '../../helpers';
 
-const NoteWrapper = styled('div')`
+const NoteSection = styled('div')`
   display: flex;
   flex-direction: column;
   padding: ${spacings.s}px;
@@ -65,7 +65,7 @@ const Notetaker = props => {
   };
 
   return (
-    <NoteWrapper>
+    <NoteSection>
       <NoteForm>
         <TextArea
           onFocus={() => {
@@ -121,7 +121,7 @@ const Notetaker = props => {
           </TimeStamp>
         )}
       </NoteForm>
-    </NoteWrapper>
+    </NoteSection>
   );
 };
 

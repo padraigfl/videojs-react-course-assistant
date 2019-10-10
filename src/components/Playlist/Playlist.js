@@ -8,7 +8,7 @@ import {
   fetchPlaylist
 } from '../../api/youtube';
 
-import { ListWrapper, ListEntry, List } from '../styledShared';
+import { ListSection, ListEntry, List } from '../styledShared';
 import CourseContext from '../../context';
 import Heading from '../Heading/Heading';
 
@@ -118,7 +118,7 @@ const Playlist = props => {
   const updatePlaylist = () =>
     getPlaylist(playlistId, context.getSavedPlaylist, context.setNewPlaylist);
   return (
-    <ListWrapper
+    <ListSection
       className={`Playlist Column ${props.isActive ? 'Column--selected' : ''}`}
     >
       <Heading
@@ -199,7 +199,7 @@ const Playlist = props => {
             );
           })}
       </List>
-    </ListWrapper>
+    </ListSection>
   );
 };
 

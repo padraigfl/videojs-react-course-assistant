@@ -1,7 +1,7 @@
 import { styled } from 'linaria/react';
 import { colors, spacings } from '../../constants/styles';
 
-export const ListWrapper = styled('section')`
+export const ListSection = styled('section')`
   max-width: 350px;
   width: 30%;
   min-width: 250px;

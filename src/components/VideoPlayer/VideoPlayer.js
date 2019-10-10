@@ -7,7 +7,7 @@ import CourseContext from '../../context';
 import { Header } from '../styledShared';
 import { spacings, colors } from '../../constants/styles';
 
-const VideoWrapper = styled('section')`
+const VideoSection = styled('section')`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -31,7 +31,7 @@ const Description = styled('div')`
   color: ${colors.accent};
   padding: ${spacings.s}px;
   margin-top: ${spacings.xs}px;
-  height: 200px;
+  max-height: 200px;
 `;
 
 export default class Video extends React.Component {
@@ -66,7 +66,7 @@ export default class Video extends React.Component {
     console.log(this.videoRef.current);
     const currentId = this.context.getCurrentlyPlayingId();
     return (
-      <VideoWrapper
+      <VideoSection
         className={`Video Column ${
           this.props.isActive ? 'Column--selected' : ''
         }`}
@@ -85,7 +85,7 @@ export default class Video extends React.Component {
           playsinline
         />
         <Description>{this.currentDescription()}</Description>
-      </VideoWrapper>
+      </VideoSection>
     );
   }
 }

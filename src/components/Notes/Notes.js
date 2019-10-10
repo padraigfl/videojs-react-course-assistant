@@ -5,7 +5,7 @@ import Notetaker from './Notetaker';
 import downloadIcon from '../../assets/download.svg';
 
 import {
-  ListWrapper,
+  ListSection,
   List,
   ListEntry,
   EllipsisTextLine,
@@ -58,7 +58,7 @@ const Notes = props => {
   const dlNotes = () => downloadNotes(context.notes, context.playlist);
 
   return (
-    <ListWrapper
+    <ListSection
       className={cx(
         `Notes Column  ${props.isActive ? 'Column--selected' : ''}`,
         main
@@ -120,7 +120,7 @@ const Notes = props => {
           // currentTrack={context.currentlyPlaying}
         />
       </div>
-    </ListWrapper>
+    </ListSection>
   );
 };
 
