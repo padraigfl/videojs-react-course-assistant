@@ -46,7 +46,11 @@ const formatPlaylistResponse = (resp, id, playlistInfo = {}) => ({
   order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
 });
 
-const getNewPlaylist = (playlistId, setPlaylist, youtubeKey) =>
+const getNewPlaylist = (
+  playlistId,
+  setPlaylist,
+  youtubeKey = process.env.YOUTUBE_API_KEY
+) =>
   fetchPlaylist(playlistId, youtubeKey)
     .then(({ items: [{ snippet }] }) => {
       fetchPlaylistItems(playlistId, youtubeKey).then(result => {
