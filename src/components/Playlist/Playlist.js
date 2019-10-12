@@ -26,8 +26,9 @@ if (!process.env.YOUTUBE_API_KEY) {
 
 const formatPlaylistResponse = (resp, id, playlistInfo = {}) => ({
   total: resp.pageInfo.totalResults,
-  items: resp.items.reduce(
-    (acc, { snippet }) => ({
+  items: resp.items.reduce((acc, { snippet }) => {
+    console.log(snippet);
+    return {
       ...acc,
       [snippet.resourceId.videoId]: {
         videoId: snippet.resourceId.videoId,
@@ -38,9 +39,8 @@ const formatPlaylistResponse = (resp, id, playlistInfo = {}) => ({
         title: snippet.title,
         description: snippet.description
       }
-    }),
-    {}
-  ),
+    };
+  }, {}),
   id,
   ...playlistInfo,
   order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
