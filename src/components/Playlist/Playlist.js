@@ -14,8 +14,6 @@ import Heading from '../Heading/Heading';
 
 if (!process.env.YOUTUBE_API_KEY) {
   console.error('DOTENV-FAILURE');
-} else {
-  console.log('dotenv success');
 }
 
 // const formatVideoResponse = resp => ({
@@ -26,9 +24,8 @@ if (!process.env.YOUTUBE_API_KEY) {
 
 const formatPlaylistResponse = (resp, id, playlistInfo = {}) => ({
   total: resp.pageInfo.totalResults,
-  items: resp.items.reduce((acc, { snippet }) => {
-    console.log(snippet);
-    return {
+  items: resp.items.reduce(
+    (acc, { snippet }) => ({
       ...acc,
       [snippet.resourceId.videoId]: {
         videoId: snippet.resourceId.videoId,
@@ -39,8 +36,9 @@ const formatPlaylistResponse = (resp, id, playlistInfo = {}) => ({
         title: snippet.title,
         description: snippet.description
       }
-    };
-  }, {}),
+    }),
+    {}
+  ),
   id,
   ...playlistInfo,
   order: resp.items.map(({ snippet }) => snippet.resourceId.videoId)
@@ -52,7 +50,12 @@ const getNewPlaylist = (
   youtubeKey = process.env.YOUTUBE_API_KEY
 ) =>
   fetchPlaylist(playlistId, youtubeKey)
-    .then(({ items: [{ snippet }] }) => {
+    .then(({ items }) => {
+      if (items.length === 0) {
+        alert('Fetched playlist is empty');
+        return;
+      }
+      const { snippet } = items[0];
       fetchPlaylistItems(playlistId, youtubeKey).then(result => {
         const formattedResult = formatPlaylistResponse(
           result,

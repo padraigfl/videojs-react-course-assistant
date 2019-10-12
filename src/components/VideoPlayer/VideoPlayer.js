@@ -63,7 +63,6 @@ export default class Video extends React.Component {
   // so videojs won't create additional wrapper in the DOM
   // see https://github.com/videojs/video.js/pull/3856
   render() {
-    console.log(this.videoRef.current);
     const currentId = this.context.getCurrentlyPlayingId();
     return (
       <VideoSection
