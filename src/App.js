@@ -178,7 +178,7 @@ const App = () => {
               />
               ,{' '}
               <Link
-                href="https://packard-belle.netlify.com"
+                href="https://packard-belle.herokuapp.com"
                 text="
                 Component Library"
               />
