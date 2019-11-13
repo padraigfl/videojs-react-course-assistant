@@ -26,7 +26,7 @@ const videoStyles = css`
 `;
 
 const Description = styled('div')`
-  overflow: scroll;
+  overflow: auto;
   background-color: ${colors.dark1};
   color: ${colors.accent};
   padding: ${spacings.s}px;
